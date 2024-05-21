@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 @Service
 public class RecipeServiceImpl implements RecipeService {
-    private RecipeRepository recipeRepository;
+    private final RecipeRepository recipeRepository;
 
     public RecipeServiceImpl(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
@@ -46,8 +46,17 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.save(recipe);
     }
 
+
     @Override
-    public void updateRecipe(Recipe recipe) {
+    public void updateRecipe(RecipeDTO recipeDTO) {
+        Recipe recipe = mapToRecipe(recipeDTO);
+        if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
+            recipeRepository.save(recipe);
+        } else {
+            throw new IllegalArgumentException("Recipe does not exist");
+        }
+    }
+    public void updateRecipePhoto(Recipe recipe) {
         if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
             recipeRepository.save(recipe);
         } else {
@@ -55,10 +64,30 @@ public class RecipeServiceImpl implements RecipeService {
         }
     }
 
+    private Recipe mapToRecipe(RecipeDTO recipeDTO) {
+        return Recipe.builder()
+                .id(recipeDTO.getId())
+                .name(recipeDTO.getName())
+                .description(recipeDTO.getDescription())
+                .imageUrl(recipeDTO.getImageUrl())
+                .ingredients(recipeDTO.getIngredients())
+                .instructions(recipeDTO.getInstructions())
+                .servings(recipeDTO.getServings())
+                .prepTime(recipeDTO.getPrepTime())
+                .tag(Recipe.Tag.valueOf(recipeDTO.getTag().getDisplayName().toUpperCase()))
+                .build();
+
+    }
+
     @Override
     public RecipeDTO getRecipeById(Long recipeID) {
         Recipe recipe = recipeRepository.findById(recipeID).get();
         return mapToRecipeDTO(recipe);
+    }
+
+    @Override
+    public void deleteRecipe(Long recipeID) {
+        recipeRepository.deleteById(recipeID);
     }
 
 

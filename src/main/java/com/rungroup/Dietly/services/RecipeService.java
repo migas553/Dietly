@@ -9,7 +9,9 @@ public interface RecipeService {
     List<RecipeDTO> getAllRecipes();
     Recipe createRecipe(Recipe recipe);
 
-    void updateRecipe(Recipe recipe);
-
+    void updateRecipe(RecipeDTO recipe);
+    void updateRecipePhoto(Recipe recipe);
     RecipeDTO getRecipeById(Long recipeID);
+    void deleteRecipe(Long recipeID);
+
 }
