@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<
+<head>
+    <title>Create Recipe</title>
+</head>
+<body layout:fragment="body" class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <!-- Page Content-->
+    <section  class="py-5">
+        <div class="container px-5 my-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder">New Recipe</h1>
+                <p class="lead fw-normal text-muted mb-0">Create a new recipe</p>
+                <form role="form" method="post" th:action="@{/recipes/new}" th:object="${recipe}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="servings" class="form-label">Servings</label>
+                        <input type="number" class="form-control" id="servings" th:field="*{servings}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="prepTime" class="form-label">Preparation Time</label>
+                        <input type="text" class="form-control" id="prepTime" th:field="*{prepTime}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tag" class="form-label">Tag</label>
+                        <select class="form-control" id="tag" th:field="*{tag}" required>
+                            <option value="">Select a tag</option>
+                            <option value="MEAT">Meat</option>
+                            <option value="FISH">Fish</option>
+                            <option value="Vegetarian">Vegetarian</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="image" name="image" required accept="image/*">
+                    </div>
+                    <div class="mb-3" id="ingredients">
+                        <label for="ingredient1" class="form-label">Ingredient 1</label>
+                        <input type="text" class="form-control ingredient-input" id="ingredient1" required>
+                    </div>
+                    <button type="button" id="addIngredient" class="btn btn-secondary">Add another ingredient</button>
+
+                    <div class="mb-3" id="instructions">
+                        <label for="instruction1" class="form-label">Instruction 1</label>
+                        <textarea class="form-control instruction-input" id="instruction1" required></textarea>
+                    </div>
+                    <button type="button" id="addInstruction" class="btn btn-secondary">Add another instruction</button>
+
+
+                    <input type="hidden" id="ingredientsJson" th:field="*{ingredients}">
+                    <input type="hidden" id="instructionsJson" th:field="*{instructions}">
+
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                <script>
+                    let ingredientCount = 1;
+                    let instructionCount = 1;
+
+                    document.getElementById('addIngredient').addEventListener('click', function() {
+                        ingredientCount++;
+                        let newIngredient = document.createElement('div');
+                        newIngredient.innerHTML = `
+                            <label for="ingredient${ingredientCount}" class="form-label">Ingredient ${ingredientCount}</label>
+                            <input type="text" class="form-control ingredient-input" id="ingredient${ingredientCount}" required>
+                        `;
+                        document.getElementById('ingredients').appendChild(newIngredient);
+                    } );
+
+                    document.getElementById('addInstruction').addEventListener('click', function() {
+                        instructionCount++;
+                        let newInstruction = document.createElement('div');
+                        newInstruction.innerHTML = `
+                            <label for="instruction${instructionCount}" class="form-label">Instruction ${instructionCount}</label>
+                            <textarea class="form-control instruction-input" id="instruction${instructionCount}" required></textarea>
+                        `;
+                        document.getElementById('instructions').appendChild(newInstruction);
+                    });
+
+                    document.querySelector('form').addEventListener('submit', function(e) {
+                        let ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value);
+                        let instructions = Array.from(document.querySelectorAll('.instruction-input')).map(input => input.value);
+
+                        document.getElementById('ingredientsJson').value = JSON.stringify(ingredients);
+                        document.getElementById('instructionsJson').value = JSON.stringify(instructions);
+                    });
+
+                </script>
+                </div>
+            </div>
+        </section>
+    </main>
+    </body>
+    </html>
