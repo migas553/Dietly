@@ -19,18 +19,22 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+                        <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
                     </div>
                     <div class="mb-3">
                         <label for="servings" class="form-label">Servings</label>
                         <input type="number" class="form-control" id="servings" th:field="*{servings}" required>
+                        <p class="error" th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
                     </div>
                     <div class="mb-3">
                         <label for="prepTime" class="form-label">Preparation Time</label>
                         <input type="text" class="form-control" id="prepTime" th:field="*{prepTime}" required>
+                        <p class="error" th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
                     </div>
                     <div class="mb-3">
                         <label for="tag" class="form-label">Tag</label>
@@ -40,7 +44,9 @@
                             <option value="FISH">Fish</option>
                             <option value="VEGETARIAN">Vegetarian</option>
                         </select>
+                        <p class="error" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}"></p>
                     </div>
+
                     <div class="mb-3">
                         <label for="image" class="form-label">Image</label>
                         <input type="file" class="form-control" id="image" name="image" required accept="image/*">
@@ -48,12 +54,14 @@
                     <div class="mb-3" id="ingredients">
                         <label for="ingredient1" class="form-label">Ingredient 1</label>
                         <input type="text" class="form-control ingredient-input" id="ingredient1" required>
+                        <p class="error" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}"></p>
                     </div>
                     <button type="button" id="addIngredient" class="btn btn-secondary">Add another ingredient</button>
 
                     <div class="mb-3" id="instructions">
                         <label for="instruction1" class="form-label">Instruction 1</label>
                         <textarea class="form-control instruction-input" id="instruction1" required></textarea>
+                        <p class="error" th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}"></p>
                     </div>
                     <button type="button" id="addInstruction" class="btn btn-secondary">Add another instruction</button>
 

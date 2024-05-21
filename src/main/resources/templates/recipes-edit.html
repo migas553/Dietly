@@ -12,27 +12,34 @@
     <section  class="py-5">
         <div class="container px-5 my-5">
             <div class="text-center mb-5">
-                <h1 class="fw-bolder">New Recipe</h1>
+                <h1 class="fw-bolder">EDIT Recipe</h1>
                 <p class="lead fw-normal text-muted mb-0">Create a new recipe</p>
                 <form enctype="multipart/form-data" method="post" role="form"
-                      th:action="@{/recipes/{recipeId}/edit(recipeId=${recipe.id})}"
+                      th:action="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}"
                       th:object="${recipe}">
                     <input type="hidden" th:field="*{id}">
+
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
-                    </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                            <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
+                        </div>
+
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+                        <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Name Error</p>
                     </div>
                     <div class="mb-3">
                         <label for="servings" class="form-label">Servings</label>
                         <input type="number" class="form-control" id="servings" th:field="*{servings}" required>
+                        <p class="text-danger" th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}">Name Error</p>
                     </div>
                     <div class="mb-3">
                         <label for="prepTime" class="form-label">Preparation Time</label>
-                        <input type="text" class="form-control" id="prepTime" th:field="*{prepTime}" required>
+                        <input type="number" class="form-control" id="prepTime" th:field="*{prepTime}" required>
+                        <p class="text-danger" th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}">Preparation Time Error</p>
                     </div>
                     <div class="mb-3">
                         <label for="tag" class="form-label">Tag</label>
@@ -42,6 +49,7 @@
                             <option value="FISH">Fish</option>
                             <option value="VEGETARIAN">Vegetarian</option>
                         </select>
+                        <p class="text-danger" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}">Tag Error</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Current Image</label>
@@ -60,6 +68,7 @@
                                 </label>
                             </div>
                         </th:block>
+                        <p class="text-danger" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Ingredients Error</p>
                     </div>
                     <button type="button" id="addIngredient" class="btn btn-secondary">Add another ingredient</button>
 
@@ -72,6 +81,7 @@
                                 </label>
                             </div>
                         </th:block>
+                        <p class="text-danger" th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}">Instructions Error</p>
                     </div>
                     <button type="button" id="addInstruction" class="btn btn-secondary">Add another instruction</button>
 
@@ -83,77 +93,81 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-danger" id="deleteButton" th:data-id="${recipe.id}">Delete</button>
                 </form>
-                <script>
-                    let ingredientCount = document.getElementsByClassName('ingredient-input').length;
-                    let instructionCount = document.getElementsByClassName('instruction-input').length;
+            </div>
+        </div>
+    </section>
+    <script>
+        let ingredientCount = document.getElementsByClassName('ingredient-input').length;
+        let instructionCount = document.getElementsByClassName('instruction-input').length;
 
-                    document.getElementById('addIngredient').addEventListener('click', function() {
-                        ingredientCount++;
-                        let newIngredient = document.createElement('div');
-                        newIngredient.innerHTML = `
+        document.getElementById('addIngredient').addEventListener('click', function() {
+            ingredientCount++;
+            let newIngredient = document.createElement('div');
+            newIngredient.innerHTML = `
                             <div class="mb-3">
                                 <label for="ingredient${ingredientCount}" class="form-label">Ingredient ${ingredientCount}</label>
                                 <input type="text" class="form-control ingredient-input" id="ingredient${ingredientCount}" required>
                                 <button type="button" class="btn btn-danger remove-ingredient">Remove</button>
                             </div>
                         `;
-                        document.getElementById('ingredients').appendChild(newIngredient);
-                    });
+            document.getElementById('ingredients').appendChild(newIngredient);
+        });
 
-                    document.getElementById('addInstruction').addEventListener('click', function() {
-                        instructionCount++;
-                        let newInstruction = document.createElement('div');
-                        newInstruction.innerHTML = `
+        document.getElementById('addInstruction').addEventListener('click', function() {
+            instructionCount++;
+            let newInstruction = document.createElement('div');
+            newInstruction.innerHTML = `
                             <div class="mb-3">
                                 <label for="instruction${instructionCount}" class="form-label">Instruction ${instructionCount}</label>
                                 <textarea class="form-control instruction-input" id="instruction${instructionCount}" required></textarea>
                                 <button type="button" class="btn btn-danger remove-instruction">Remove</button>
                             </div>
                         `;
-                        document.getElementById('instructions').appendChild(newInstruction);
-                    });
+            document.getElementById('instructions').appendChild(newInstruction);
+        });
 
-                    document.getElementById('ingredients').addEventListener('click', function(e) {
-                        if(e.target && e.target.classList.contains('remove-ingredient')) {
-                            e.target.parentElement.remove();
-                        }
-                    });
+        document.getElementById('ingredients').addEventListener('click', function(e) {
+            if(e.target && e.target.classList.contains('remove-ingredient')) {
+                e.target.parentElement.remove();
+            }
+        });
 
-                    document.getElementById('instructions').addEventListener('click', function(e) {
-                        if(e.target && e.target.classList.contains('remove-instruction')) {
-                            e.target.parentElement.remove();
-                        }
-                    });
-                    document.querySelector('form').addEventListener('submit', function(e) {
-                        let ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value);
-                        let instructions = Array.from(document.querySelectorAll('.instruction-input')).map(input => input.value);
+        document.getElementById('instructions').addEventListener('click', function(e) {
+            if(e.target && e.target.classList.contains('remove-instruction')) {
+                e.target.parentElement.remove();
+            }
+        });
+        document.querySelector('form').addEventListener('submit', function() {
+            let ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value);
+            let instructions = Array.from(document.querySelectorAll('.instruction-input')).map(input => input.value);
 
-                        document.getElementById('ingredientsJson').value = ingredients.join('|');
-                        document.getElementById('instructionsJson').value = instructions.join('|');
-                    });
-                    document.getElementById('deleteButton').addEventListener('click', function(event) {
-                        event.preventDefault(); // Prevent the form from being submitted normally
-                        let recipeId = this.getAttribute('data-id');
-                        let confirmation = confirm('Are you sure you want to delete this recipe?');
-                        if (confirmation) {
-                            fetch(`/recipes/delete/${recipeId}`, {
-                                method: 'DELETE'
-                            })
-                                .then(response => {
-                                    if (response.status === 200) { // Check if the response status is 200
-                                        alert('Recipe deleted successfully');
-                                        window.location.href = '/recipes'; // Manually redirect the user to the '/recipes' page
-                                    } else {
-                                        alert('Error deleting recipe');
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
+            document.getElementById('ingredientsJson').value = ingredients.join('|');
+            document.getElementById('instructionsJson').value = instructions.join('|');
+        });
+        document.getElementById('deleteButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the form from being submitted normally
+            let recipeId = this.getAttribute('data-id');
+            let confirmation = confirm('Are you sure you want to delete this recipe?');
+            if (confirmation) {
+                fetch(`/recipes/delete/${recipeId}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.status === 200) { // Check if the response status is 200
+                            alert('Recipe deleted successfully');
+                            window.location.href = '/recipes'; // Manually redirect the user to the '/recipes' page
+                        } else {
+                            alert('Error deleting recipe');
                         }
-                    });
-                </script>
-            </div>
-        </div>
-    </section>
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 </main>
+
 </body>
+
+
+
 </html>

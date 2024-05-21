@@ -42,21 +42,23 @@ public class RecipeServiceImpl implements RecipeService {
 
     //  CREATE RECIPE - CREATE
     @Override
-    public Recipe createRecipe(Recipe recipe) {
+    public Recipe createRecipe(RecipeDTO recipeDTO) {
+        Recipe recipe = mapToRecipe(recipeDTO);
         return recipeRepository.save(recipe);
     }
 
 
     @Override
     public void updateRecipe(RecipeDTO recipeDTO) {
-        Recipe recipe = mapToRecipe(recipeDTO);
-        if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
-            recipeRepository.save(recipe);
-        } else {
-            throw new IllegalArgumentException("Recipe does not exist");
-        }
+//        Recipe recipe = recipeRepository.findById(recipeId);
+//        if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
+//            recipeRepository.save(recipe);
+//        } else {
+//            throw new IllegalArgumentException("Recipe does not exist");
+//        }
     }
-    public void updateRecipePhoto(Recipe recipe) {
+    public void updateRecipePhoto(RecipeDTO recipeDTO) {
+        Recipe recipe = mapToRecipe(recipeDTO);
         if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
             recipeRepository.save(recipe);
         } else {

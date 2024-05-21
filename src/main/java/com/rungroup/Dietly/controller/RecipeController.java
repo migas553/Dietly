@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rungroup.Dietly.DTO.RecipeDTO;
 import com.rungroup.Dietly.models.Recipe;
 import com.rungroup.Dietly.services.RecipeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,10 +53,14 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes/new")
-    public String saveRecipe(@ModelAttribute("recipe") Recipe recipe,
+    public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeDTO recipeDTO, BindingResult bindingResult, Model model,
                              @RequestParam("ingredients") String ingredientsJson,
                              @RequestParam("instructions") String instructionsJson,
                              @RequestParam("image") MultipartFile imageFile) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("recipe", recipeDTO);
+            return "recipe-new";
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> ingredients;
         List<String> instructions;
@@ -67,39 +73,24 @@ public class RecipeController {
             e.printStackTrace();
             return "error";
         }
-        if (!imageFile.isEmpty()) {
-            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-            Path path = Paths.get("src/main/resources/static/images/" + fileName);
-            try (InputStream inputStream = imageFile.getInputStream()) {
-                Files.copy(inputStream,
-                        path,
-                        StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "error";
-            }
+
+        recipeDTO.setIngredients(ingredients);
+        recipeDTO.setInstructions(instructions);
+
+        String fileName = recipeDTO.getName().replace(" ", "-") + ".jpg";
+        Path path = Paths.get("src/main/resources/static/images/%s".formatted(fileName));
+        try (InputStream inputStream = imageFile.getInputStream()) {
+            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
         }
+        recipeDTO.setImageUrl("/images/" + fileName);
 
-        recipe.setIngredients(ingredients);
-        recipe.setInstructions(instructions);
+        recipeService.createRecipe(recipeDTO);
 
-        recipe = recipeService.createRecipe(recipe);
-
-        if (!imageFile.isEmpty()) {
-            String fileName = recipe.getName().replace(" ", "-") + "-" + recipe.getId() + ".jpg";
-            Path path = Paths.get("src/main/resources/static/images/%s".formatted(fileName));
-            try (InputStream inputStream = imageFile.getInputStream()) {
-                Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "error";
-            }
-            recipe.setImageUrl("/images/" + fileName);
-            recipeService.updateRecipePhoto(recipe); // Update the recipe with the new image URL
-        }
         return "redirect:/recipes";
     }
-
     @GetMapping("/recipes/edit/{recipeID}")
     public String editRecipe(@PathVariable Long recipeID, Model model) {
         RecipeDTO recipe = recipeService.getRecipeById(recipeID);
@@ -109,10 +100,14 @@ public class RecipeController {
 
     @PostMapping("/recipes/edit/{recipeId}")
     public String updateRecipe(@PathVariable("recipeId") Long recipeID,
-                               @ModelAttribute("recipe") RecipeDTO recipe,
+                               @Valid @ModelAttribute("recipe") RecipeDTO recipe,
+                               BindingResult bindingResult,
                                @RequestParam("ingredients") String ingredientsJson,
                                @RequestParam("instructions") String instructionsJson,
                                @RequestParam(value = "newImage", required = false) MultipartFile imageFile) {
+        if (bindingResult.hasErrors()) {
+            return "recipes-edit";
+        }
         List<String> ingredients = Arrays.asList(ingredientsJson.split("\\|"));
         List<String> instructions = Arrays.asList(instructionsJson.split("\\|"));
 
@@ -131,6 +126,9 @@ public class RecipeController {
                 throw new RuntimeException("Failed to store image file.", e);
             }
             recipe.setImageUrl("/images/" + fileName);
+        } else {
+            RecipeDTO currentRecipe = recipeService.getRecipeById(recipeID);
+            recipe.setImageUrl(currentRecipe.getImageUrl());
         }
 
         recipeService.updateRecipe(recipe);
