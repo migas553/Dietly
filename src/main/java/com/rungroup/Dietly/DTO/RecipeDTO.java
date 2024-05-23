@@ -6,7 +6,7 @@ import lombok.Data;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -31,23 +31,11 @@ public class RecipeDTO {
     private int servings;
     @Min(value = 1, message = "Preparation time should be minimum one minute")
     private int prepTime;
-    @NotNull(message = "Tag cannot be null")
-    private Tag tag;
+    @NotNull(message = "Recipe should have a category")
+    private String category;
     @CreationTimestamp
     private LocalDateTime createdOn;
 
-    @Getter
-    public enum Tag {
-        MEAT("Meat"),
-        FISH("Fish"),
-        VEGETARIAN("Vegetarian");
-
-        private final String displayName;
-
-        Tag(String displayName) {
-            this.displayName = displayName;
-        }
-
     }
 
-}
+

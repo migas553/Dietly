@@ -1,7 +1,8 @@
 package com.rungroup.Dietly.services.impl;
-
 import com.rungroup.Dietly.DTO.RecipeDTO;
+import com.rungroup.Dietly.models.Category;
 import com.rungroup.Dietly.models.Recipe;
+import com.rungroup.Dietly.repository.CategoryRepository;
 import com.rungroup.Dietly.repository.RecipeRepository;
 import com.rungroup.Dietly.services.RecipeService;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,10 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
-
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    private final CategoryRepository categoryRepository;
+    public RecipeServiceImpl(RecipeRepository recipeRepository, CategoryRepository categoryRepository) {
         this.recipeRepository = recipeRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 //  GET ALL RECIPES - READ
@@ -35,7 +37,7 @@ public class RecipeServiceImpl implements RecipeService {
                 .instructions(recipe.getInstructions())
                 .servings(recipe.getServings())
                 .prepTime(recipe.getPrepTime())
-                .tag(RecipeDTO.Tag.valueOf(recipe.getTag().getDisplayName().toUpperCase()))
+                .category(recipe.getCategory().getName())
                 .createdOn(recipe.getCreatedOn())
                 .build();
     }
@@ -50,12 +52,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void updateRecipe(RecipeDTO recipeDTO) {
-//        Recipe recipe = recipeRepository.findById(recipeId);
-//        if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
-//            recipeRepository.save(recipe);
-//        } else {
-//            throw new IllegalArgumentException("Recipe does not exist");
-//        }
+        Recipe recipe = mapToRecipe(recipeDTO);
+       if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
+            recipeRepository.save(recipe);
+        } else {
+            throw new IllegalArgumentException("Recipe does not exist");
+        }
     }
     public void updateRecipePhoto(RecipeDTO recipeDTO) {
         Recipe recipe = mapToRecipe(recipeDTO);
@@ -69,14 +71,14 @@ public class RecipeServiceImpl implements RecipeService {
     private Recipe mapToRecipe(RecipeDTO recipeDTO) {
         return Recipe.builder()
                 .id(recipeDTO.getId())
-                .name(recipeDTO.getName())
+                .name(recipeDTO.getName()) 
                 .description(recipeDTO.getDescription())
                 .imageUrl(recipeDTO.getImageUrl())
                 .ingredients(recipeDTO.getIngredients())
                 .instructions(recipeDTO.getInstructions())
                 .servings(recipeDTO.getServings())
                 .prepTime(recipeDTO.getPrepTime())
-                .tag(Recipe.Tag.valueOf(recipeDTO.getTag().getDisplayName().toUpperCase()))
+                .category(categoryRepository.findByName(recipeDTO.getCategory()))
                 .build();
 
     }

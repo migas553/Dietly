@@ -37,14 +37,14 @@
                         <p class="error" th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
                     </div>
                     <div class="mb-3">
-                        <label for="tag" class="form-label">Tag</label>
-                        <select class="form-control" id="tag" th:field="*{tag}" required>
+                        <label for="category" class="form-label">Tag</label>
+                        <select class="form-control" id="category" th:field="*{category}" required>
                             <option value="">Select a tag</option>
-                            <option value="MEAT">Meat</option>
-                            <option value="FISH">Fish</option>
-                            <option value="VEGETARIAN">Vegetarian</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Fish">Fish</option>
+                            <option value="Vegetarian">Vegetarian</option>
                         </select>
-                        <p class="error" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}"></p>
+                        <p class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
                     </div>
 
                     <div class="mb-3">

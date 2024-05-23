@@ -43,13 +43,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="tag" class="form-label">Tag</label>
-                        <select class="form-control" id="tag" th:field="*{tag}" required>
+                        <select class="form-control" id="tag" th:field="*{category}" required>
                             <option value="">Select a tag</option>
-                            <option value="MEAT">Meat</option>
-                            <option value="FISH">Fish</option>
-                            <option value="VEGETARIAN">Vegetarian</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Fish">Fish</option>
+                            <option value="Vegetarian">Vegetarian</option>
                         </select>
-                        <p class="text-danger" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}">Tag Error</p>
+                        <p class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Tag
+                            Error</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Current Image</label>

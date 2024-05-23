@@ -140,6 +140,13 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/recipes/{recipeID}")
+    public String viewRecipe(@PathVariable Long recipeID, Model model) {
+        RecipeDTO recipe = recipeService.getRecipeById(recipeID);
+        model.addAttribute("recipe", recipe);
+        return "recipe-show";
+    }
+
 
 }
 

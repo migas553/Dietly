@@ -15,22 +15,26 @@
             <form th:action="@{/recipes/new}" method="get">
                 <button type="submit" class="btn btn-primary">New Recipe</button>
             </form>
+
+
             <div class="row gx-5">
                 <div th:each="recipe :${recipes}" class="col-lg-6">
                     <div class="position-relative mb-5">
+                        <a th:href="@{/recipes/{recipeId}(recipeId=${recipe.id})}"
+                        ><h1 th:text="${recipe.name}"
+
+                            class="h3 fw-bolder text-decoration-none link-dark "
+                        >Project name</h1></a>
                         <img class="img-fluid rounded-3 mb-3" th:src="@{${recipe.imageUrl}}"  alt=""/>
                         <p th:text="${recipe.description}" class="lead fw-bolder text-primary">Project name</p>
                         <p th:text="${recipe.servings}" class="lead fw-bolder text-primary">Project name</p>
                         <p th:text="${recipe.prepTime}" class="lead fw-bolder text-primary">Project name</p>
-                        <p th:text="${recipe.tag.displayName}" class="lead fw-bolder text-primary">Project name</p>
-                        <h1 th:text="${recipe.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link"
-                        >Project
-                            name</h1>
+                        <p th:text="${recipe.category}" class="lead fw-bolder text-primary">Project name</p>
+
                         <br>
 
-                        <a class="text-dark stretched-link"
-                           th:href="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}">View
-                            details</a>
+                        <a class="text-dark"
+                           th:href="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}">Edit recipe</a>
 
                     </div>
                 </div>

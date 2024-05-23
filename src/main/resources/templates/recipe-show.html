@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <title>Edit Recipe</title>
+</head>
+<body layout:fragment="body" class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <!-- Page Content-->
+    <section  class="py-5">
+        <div class="container px-5 my-5">
+            <div class="mb-5"
+                th:action="@{/recipes/{recipeId}(recipeId=${recipe.id})}"
+                th:object="${recipe}">
+                <h1 class="fw-bolder" th:text="*{name}"></h1>
+
+                <p class="lead fw-normal text-muted mb-0" th:text="*{description}"></p>
+                <p class="lead fw-normal text-muted mb-0" th:text="*{servings}"></p>
+                <p class="lead fw-normal text-muted mb-0" th:text="*{prepTime}"></p>
+                <p class="lead fw-normal text-muted mb-0" th:text="*{category}"></p>
+                <img th:src="*{imageUrl}" alt="Current Image" width="200" height="200">
+                <ul>
+                    <li th:each="ingredient : *{ingredients}"
+                        th:text="${ingredient}"
+                        class="text-info"></li>
+                </ul>
+                <h3 class="text-secondary">Instructions</h3>
+                <p th:each="instruction : *{instructions}"
+                   th:text="${instruction}"
+                   class="text-secondary"></p>
+                <a class="btn btn-primary" href="/recipes">Back to Recipes</a>
+                <p class="lead fw-normal text-muted mb-0" th:text="*{createdOn}"></p>
+
+            </div>
+        </div>
+    </section>
+    <script>
+
+    </script>
+</main>
+
+</body>
+
+
+
+</html>

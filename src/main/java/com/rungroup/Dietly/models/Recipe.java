@@ -1,11 +1,7 @@
 package com.rungroup.Dietly.models;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,22 +27,12 @@ public class Recipe {
     private List<String> instructions;
     private int servings;
     private int prepTime; // in minutes
-    private Tag tag;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
     @CreationTimestamp
     private LocalDateTime createdOn;
 
-    @Getter
-    public enum Tag {
-        MEAT("Meat"),
-        FISH("Fish"),
-        VEGETARIAN("Vegetarian");
-
-        private final String displayName;
-
-        Tag(String displayName) {
-            this.displayName = displayName;
-        }
-    }
 
 
 }
