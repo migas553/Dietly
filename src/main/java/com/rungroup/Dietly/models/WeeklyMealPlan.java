@@ -17,6 +17,7 @@ public class WeeklyMealPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private LocalDate weekStartDate;
 
     @OneToMany(mappedBy = "weeklyMealPlan")

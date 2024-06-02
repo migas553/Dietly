@@ -1,6 +1,5 @@
 package com.rungroup.Dietly.services.impl;
 import com.rungroup.Dietly.DTO.RecipeDTO;
-import com.rungroup.Dietly.models.Category;
 import com.rungroup.Dietly.models.Recipe;
 import com.rungroup.Dietly.repository.CategoryRepository;
 import com.rungroup.Dietly.repository.RecipeRepository;
@@ -46,7 +45,8 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe createRecipe(RecipeDTO recipeDTO) {
         Recipe recipe = mapToRecipe(recipeDTO);
-        return recipeRepository.save(recipe);
+        recipeRepository.save(recipe);
+        return recipe;
     }
 
 
