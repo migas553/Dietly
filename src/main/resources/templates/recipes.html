@@ -14,9 +14,8 @@
                 <h1 class="fw-bolder">Receitas</h1>
                 <p class="lead fw-normal text-muted mb-0">Company portfolio</p>
             </div>
-            <form th:action="@{/recipes/new}" method="get">
-                <button type="submit" class="btn btn-primary">New Recipe</button>
-            </form>
+            <a class="btn bg-danger text-white text-uppercase" th:href="@{/recipes/new}" th:if="${isAdmin}">Add new recipe</a>
+            <br>
 
 
             <div class="row gx-5">
@@ -36,7 +35,8 @@
                         <br>
 
                         <a class="text-dark"
-                           th:href="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}">Edit recipe</a>
+                           th:href="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}" th:if="${isAdmin}">Edit
+                            recipe</a>
 
                     </div>
                 </div>

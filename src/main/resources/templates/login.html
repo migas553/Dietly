@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <title>Edit Recipe</title>
+</head>
+<body layout:fragment="body" class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <!--  Register Form  -->
+    <section class="py-5">
+        <div class="container px-5 my-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder"> Login </h1>
+                <p class="lead fw-normal text-muted mb-0">Enter your credentials</p>
+                <div th:if="${param.success}" class="alert alert-success">
+                    You are now ready to login !
+                </div>
+                <div thg:if="${param.logout}">
+                    <p class="text-danger">You are now logged out</p>
+                </div>
+                <div thg:if="${param.error}">
+                    <p class="text-danger">Invalid username and password.</p>
+                </div>
+                <form method="post" role="form" th:action="@{/login}">
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <button th:href="@{/login}" type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+
+</main>
+
+</body>
+
+
+
+</html>
