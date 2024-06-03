@@ -13,6 +13,5 @@ import java.util.List;
 @Builder
 public class WeeklyMealPlanDTO {
     private Long id;
-    private LocalDate weekStartDate;
     private List<MealDTO> meals;
 }

@@ -2,6 +2,8 @@ package com.rungroup.Dietly.DTO;
 
 import lombok.*;
 
+import java.util.Date;
+
 //Lombok annotations
 @Data
 @NoArgsConstructor
@@ -9,6 +11,8 @@ import lombok.*;
 @Builder
 public class MealDTO {
     private Long id;
-    private String name;
     private Long recipeId;
+    private Long userId;
+    private String name;
+    private Date date;
 }

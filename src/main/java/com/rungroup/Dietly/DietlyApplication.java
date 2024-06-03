@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import java.sql.SQLException;
 import org.h2.tools.Server;
-
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 
 
 @SpringBootApplication
@@ -19,5 +19,8 @@ public class DietlyApplication {
 	public Server h2Server() throws SQLException {
 		return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
 	}
-
+	@Bean
+	public SpringSecurityDialect springSecurityDialect() {
+		return new SpringSecurityDialect();
+	}
 }

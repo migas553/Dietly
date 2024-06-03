@@ -28,4 +28,5 @@ public class UserEntity {
     private List<Role> roles = new ArrayList<>();
     private String firstName;
     private String lastName;
+
 }

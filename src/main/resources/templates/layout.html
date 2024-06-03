@@ -23,8 +23,10 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/recipes}">Recipes</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/login}">Login</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Login
+                </a></li>
+                <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">
+                    Logout</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/register}">Register</a></li>
             </ul>
         </div>
