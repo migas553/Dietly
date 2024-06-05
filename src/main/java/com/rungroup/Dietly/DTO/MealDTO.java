@@ -2,7 +2,8 @@ package com.rungroup.Dietly.DTO;
 
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 //Lombok annotations
 @Data
@@ -14,5 +15,6 @@ public class MealDTO {
     private Long recipeId;
     private Long userId;
     private String name;
-    private Date date;
+    private LocalDate date;
+    private Long mealTypeId;
 }

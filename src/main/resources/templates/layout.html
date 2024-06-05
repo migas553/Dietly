@@ -25,9 +25,12 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/recipes}">Recipes</a></li>
                 <li class="nav-item"><a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Login
                 </a></li>
+                <li class="nav-item"><a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/register}">
+                    Register</a></li>
+                <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()"th:href="@{/user}">My Account</a></li>
                 <li class="nav-item"><a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">
                     Logout</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/register}">Register</a></li>
+
             </ul>
         </div>
     </div>
