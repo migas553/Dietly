@@ -48,15 +48,19 @@ public class MealServiceImpl implements MealService {
                 .user(userRepository.findById(mealDTO.getUserId()).orElseThrow())
                 .date(mealDTO.getDate())
                 .name(mealDTO.getName())
-
                 .build();
     }
-
+    private void deleteMealByDate(LocalDate date, MealType mealType) {
+        Meal meal = mealRepository.findByDateAndMealType(date, mealType);
+        if (meal != null) {
+            mealRepository.delete(meal);
+        }
+    }
 
     @Override
     public Meal createMeal(MealDTO mealDTO) {
         Meal meal = mapToMeal(mealDTO);
-        System.out.println("Meal: " + meal);
+        deleteMealByDate(meal.getDate(), meal.getMealType());
         mealRepository.save(meal);
         return meal;
     }
@@ -93,7 +97,7 @@ public class MealServiceImpl implements MealService {
         Collections.shuffle(fishRecipes);
         Collections.shuffle(vegetableRecipes);
 
-        // Select the first n recipes from each list
+        // Slice the first n recipes from each list
         List<Recipe> selectedMeatRecipes = meatRecipes.subList(0, meatMeals);
         List<Recipe> selectedFishRecipes = fishRecipes.subList(0, fishMeals);
         List<Recipe> selectedVegetarianRecipes = vegetableRecipes.subList(0, vegetarianMeals);
@@ -118,10 +122,8 @@ public class MealServiceImpl implements MealService {
             for (int j = 0; j < 2; j++) {
                 // Select a recipe from the list of selected recipes
                 Recipe selectedRecipe = selectedRecipes.removeFirst();
-                LocalDate nextDayOfWeek = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.valueOf(daysOfWeek.get(i).toUpperCase())));
-
-
-
+                LocalDate nextDayOfWeek =
+                        diet.getStartDate().with(TemporalAdjusters.next(DayOfWeek.valueOf(daysOfWeek.get(i).toUpperCase())));
 
                 // Create a MealDTO with the selected recipe, meal type, and the day of the week as the name
                 MealDTO mealDTO = new MealDTO();
@@ -129,7 +131,6 @@ public class MealServiceImpl implements MealService {
                 mealDTO.setUserId(user.getId());
                 mealDTO.setDate(nextDayOfWeek);
                 mealDTO.setName(daysOfWeek.get(i));
-
 
                 // Set the meal type as lunch or dinner
                 if (j == 0) {
@@ -140,8 +141,7 @@ public class MealServiceImpl implements MealService {
 
                 // Add the created MealDTO to the weekly schedule
                 weeklySchedule[i][j] = mealDTO;
-                System.out.println("MealDTO: " + mealDTO);
-                mealRepository.save(mapToMeal(mealDTO));
+                createMeal(mealDTO);
 
             }
         }
