@@ -12,6 +12,8 @@
         <div class="container px-5 my-5">
             <p class="lead fw-bolder text-primary">Hello <span th:text="${user.firstName}"></span></p>
             <hr>
+
+
             <H3 class="fw-bolder"> Your Meal Planner</H3>
 
             <div class="slider-container">
@@ -44,6 +46,34 @@
 
             </div>
             <div>
+                <h3>Meal Plan</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Day</th>
+                        <th scope="col">Week Day</th>
+                        <th scope="col">Meal</th>
+                        <th scope="col">Recipe</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Shuffle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="meal : ${meals}">
+                        <td th:text="${meal.date}"></td>
+                        <td th:text="${meal.name}"></td>
+                        <td th:text="${meal.mealType.name}"></td>
+                        <td th:text="${meal.recipe.name}"></td>
+                        <td th:text="${meal.recipe.category}"></td>
+                        <td>
+                            <a class="text-dark"
+                                 th:href="@{/shuffleMeal/{mealId}(mealId=${meal.id})}" >Edit Meal</a>
+                        </td>
+
+
+                    </tr>
+                    </tbody>
+                </table>
 
             </div>
         </div>

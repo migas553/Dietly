@@ -9,14 +9,16 @@
 <body layout:fragment="body" class="d-flex flex-column h-100">
 <main class="flex-shrink-0">
     <!-- Page Content-->
-    <section  class="py-5">
+    <section>
         <div class="container px-5 my-5">
             <div class="mb-5"
                 th:action="@{/recipes/{recipeId}(recipeId=${recipe.id})}"
                 th:object="${recipe}">
-                <h1 class="fw-bolder" th:text="*{name}"></h1>
+                <h1 th:text="*{name}"></h1>
+                <p class="text-muted mb-0" th:text="*{description}"></p>
 
-                <p class="lead fw-normal text-muted mb-0" th:text="*{description}"></p>
+
+
                 <p class="lead fw-normal text-muted mb-0" th:text="*{servings}"></p>
                 <p class="lead fw-normal text-muted mb-0" th:text="*{prepTime}"></p>
                 <p class="lead fw-normal text-muted mb-0" th:text="*{category}"></p>

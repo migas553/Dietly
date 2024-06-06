@@ -24,8 +24,8 @@ public class RecipeServiceImpl implements RecipeService {
         return recipes.stream().map(this::mapToRecipeDTO).collect(Collectors.toList());
 
     }
-
-    private RecipeDTO mapToRecipeDTO(Recipe recipe) {
+    @Override
+    public RecipeDTO mapToRecipeDTO(Recipe recipe) {
 
         return RecipeDTO.builder()
                 .id(recipe.getId())
@@ -67,8 +67,8 @@ public class RecipeServiceImpl implements RecipeService {
             throw new IllegalArgumentException("Recipe does not exist");
         }
     }
-
-    private Recipe mapToRecipe(RecipeDTO recipeDTO) {
+    @Override
+    public Recipe mapToRecipe(RecipeDTO recipeDTO) {
         return Recipe.builder()
                 .id(recipeDTO.getId())
                 .name(recipeDTO.getName()) 

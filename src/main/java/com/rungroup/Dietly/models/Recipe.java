@@ -32,6 +32,14 @@ public class Recipe {
     private Category category;
     @CreationTimestamp
     private LocalDateTime createdOn;
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                // other fields...
+                ", category=" + category.getName() +  // assuming Category has a getName() method
+                '}';
+    }
+
 
 
 

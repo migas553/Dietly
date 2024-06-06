@@ -21,4 +21,12 @@ public class MealType {
 
     @OneToMany(mappedBy = "mealType")
     private List<Meal> meals;
+
+    @Override
+    public String toString() {
+        return "MealType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

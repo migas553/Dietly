@@ -11,7 +11,11 @@ public interface RecipeService {
 
     void updateRecipe(RecipeDTO recipe);
     void updateRecipePhoto(RecipeDTO recipe);
+
+    Recipe mapToRecipe(RecipeDTO recipeDTO);
+
     RecipeDTO getRecipeById(Long recipeID);
     void deleteRecipe(Long recipeID);
+    RecipeDTO mapToRecipeDTO(Recipe recipe);
 
 }

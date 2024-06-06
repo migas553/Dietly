@@ -1,5 +1,6 @@
 package com.rungroup.Dietly.DTO;
 
+import com.rungroup.Dietly.models.MealType;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,9 +13,9 @@ import java.time.LocalDate;
 @Builder
 public class MealDTO {
     private Long id;
-    private Long recipeId;
+    private RecipeDTO recipe;
     private Long userId;
     private String name;
     private LocalDate date;
-    private Long mealTypeId;
+    private MealType mealType;
 }

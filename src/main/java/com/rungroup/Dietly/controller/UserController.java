@@ -2,6 +2,7 @@ package com.rungroup.Dietly.controller;
 
 
 import com.rungroup.Dietly.DTO.DietDTO;
+import com.rungroup.Dietly.DTO.MealDTO;
 import com.rungroup.Dietly.models.UserEntity;
 import com.rungroup.Dietly.services.MealService;
 import com.rungroup.Dietly.services.RecipeService;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -30,6 +33,8 @@ public class UserController {
         User getUsername = userService.getCurrentUser();
         UserEntity user = userService.findByUsername(getUsername.getUsername());
         DietDTO diet = new DietDTO();
+        List<MealDTO> meals = mealService.getAllMeals(user);
+        model.addAttribute("meals", meals);
         model.addAttribute("diet", diet);
         model.addAttribute("user", user);
         return "user";

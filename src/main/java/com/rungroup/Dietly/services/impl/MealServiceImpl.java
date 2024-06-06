@@ -2,13 +2,13 @@ package com.rungroup.Dietly.services.impl;
 
 import com.rungroup.Dietly.DTO.DietDTO;
 import com.rungroup.Dietly.DTO.MealDTO;
+import com.rungroup.Dietly.DTO.RecipeDTO;
 import com.rungroup.Dietly.models.*;
-import com.rungroup.Dietly.repository.MealRepository;
-import com.rungroup.Dietly.repository.MealTypeRepository;
-import com.rungroup.Dietly.repository.RecipeRepository;
-import com.rungroup.Dietly.repository.UserRepository;
+import com.rungroup.Dietly.repository.*;
 import com.rungroup.Dietly.services.MealService;
+import com.rungroup.Dietly.services.RecipeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,61 +19,65 @@ import java.util.stream.Collectors;
 public class MealServiceImpl implements MealService {
     private final MealRepository mealRepository;
     private final RecipeRepository recipeRepository;
-
     private final UserRepository userRepository;
     private final MealTypeRepository mealTypeRepository;
+    private final RecipeService recipeService;
+    private final CategoryRepository categoryRepository;
 
-    public MealServiceImpl(MealRepository mealRepository, RecipeRepository recipeRepository, UserRepository userRepository, MealTypeRepository mealTypeRepository) {
+
+    public MealServiceImpl(MealRepository mealRepository, RecipeRepository recipeRepository, UserRepository userRepository, MealTypeRepository mealTypeRepository,  RecipeService recipeService, CategoryRepository categoryRepository) {
         this.mealRepository = mealRepository;
         this.recipeRepository = recipeRepository;
-
         this.userRepository = userRepository;
         this.mealTypeRepository = mealTypeRepository;
+        this.recipeService = recipeService;
+        this.categoryRepository = categoryRepository;
     }
 
     private MealDTO mapToMealDTO(Meal meal) {
         return MealDTO.builder()
                 .id(meal.getId())
-                .name(meal.getMealType().getName())
-                .recipeId(meal.getRecipe().getId())
+                .date(meal.getDate())
+                .name(meal.getName())
+                .mealType(meal.getMealType())
+                .recipe(recipeService.mapToRecipeDTO(meal.getRecipe()))
                 .userId(meal.getUser().getId())
                 .date(meal.getDate())
                 .build();
     }
     private Meal mapToMeal(MealDTO mealDTO) {
         return Meal.builder()
+                .id(mealDTO.getId())
                 .date(mealDTO.getDate())
-                .mealType(mealTypeRepository.findById(mealDTO.getMealTypeId()).orElseThrow())
-                .recipe(recipeRepository.findById(mealDTO.getRecipeId()).orElseThrow())
+                .mealType(mealTypeRepository.findById(mealDTO.getMealType().getId()).orElseThrow())
+                .recipe(recipeService.mapToRecipe(mealDTO.getRecipe()))
                 .user(userRepository.findById(mealDTO.getUserId()).orElseThrow())
                 .date(mealDTO.getDate())
                 .name(mealDTO.getName())
                 .build();
     }
-    private void deleteMealByDate(LocalDate date, MealType mealType) {
-        Meal meal = mealRepository.findByDateAndMealType(date, mealType);
-        if (meal != null) {
-            mealRepository.delete(meal);
-        }
-    }
+
+
 
     @Override
-    public Meal createMeal(MealDTO mealDTO) {
+    public void createMeal(MealDTO mealDTO) {
         Meal meal = mapToMeal(mealDTO);
-        deleteMealByDate(meal.getDate(), meal.getMealType());
         mealRepository.save(meal);
-        return meal;
-    }
-
-    @Override
-    public List<MealDTO> getAllMeals() {
-        List<Meal> meals = mealRepository.findAll();
-        return meals.stream().map(this::mapToMealDTO).collect(Collectors.toList());
 
     }
 
     @Override
-    public List<MealDTO> generateSchedule(DietDTO diet, UserEntity user) {
+    public List<MealDTO> getAllMeals(UserEntity user) {
+        List<Meal> meals = mealRepository.findAllByUser(user);
+        return meals.stream()
+                .sorted(Comparator.comparing(Meal::getDate))
+                .map(this::mapToMealDTO)
+                .collect(Collectors.toList());
+
+    }
+    @Transactional
+    @Override
+    public void generateSchedule(DietDTO diet, UserEntity user) {
 
         // Calculate the total number of meals
         int totalMeals = 14;
@@ -87,9 +91,10 @@ public class MealServiceImpl implements MealService {
         int meatMeals = (int) Math.round(proteinMeals * (diet.getMeatPercentage() / 100.0));
         int fishMeals = proteinMeals - meatMeals;
 
+
         // Get meat, fish and vegetable recipes
-        List<Recipe> meatRecipes = recipeRepository.findByCategoryNameEquals("Meat");
         List<Recipe> fishRecipes = recipeRepository.findByCategoryNameEquals("Fish");
+        List<Recipe> meatRecipes = recipeRepository.findByCategoryNameEquals("Meat");
         List<Recipe> vegetableRecipes = recipeRepository.findByCategoryNameEquals("Vegetarian");
 
         // Randomize recipes
@@ -107,75 +112,67 @@ public class MealServiceImpl implements MealService {
         selectedRecipes.addAll(selectedMeatRecipes);
         selectedRecipes.addAll(selectedFishRecipes);
         selectedRecipes.addAll(selectedVegetarianRecipes);
+        Collections.shuffle(selectedRecipes);
+        LocalDate startDate = diet.getStartDate();
+        LocalDate endDate = diet.getStartDate().plusDays(6);
+        mealRepository.deleteByDateBetween(startDate, endDate);
 
         List<String> daysOfWeek = new LinkedList<>(List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
 
         String startDay = diet.getStartDate().getDayOfWeek().name();
         // Rotate the daysOfWeek list so that it starts with the specified day
-        while (!daysOfWeek.get(0).equalsIgnoreCase(startDay)) {
-            String removedDay = daysOfWeek.remove(0);
-            daysOfWeek.add(removedDay);
-        }
+        int startDayIndex = daysOfWeek.indexOf(startDay);
+        Collections.rotate(daysOfWeek, -startDayIndex);
+
         MealDTO[][] weeklySchedule = new MealDTO[7][2];
 
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 2; j++) {
                 // Select a recipe from the list of selected recipes
-                Recipe selectedRecipe = selectedRecipes.removeFirst();
-                LocalDate nextDayOfWeek =
-                        diet.getStartDate().with(TemporalAdjusters.next(DayOfWeek.valueOf(daysOfWeek.get(i).toUpperCase())));
-
+//                System.out.println(diet);
+                RecipeDTO selectedRecipe = recipeService.mapToRecipeDTO(selectedRecipes.removeFirst());
+                LocalDate nextDayOfWeek;
+                int currentDayOfWeekIndex = diet.getStartDate().getDayOfWeek().getValue() % 7;
+                int targetDayOfWeekIndex = DayOfWeek.valueOf(daysOfWeek.get(i).toUpperCase()).getValue() % 7;
+                int daysUntilNextDayOfWeek = (targetDayOfWeekIndex - currentDayOfWeekIndex + 7) % 7;
+                nextDayOfWeek = diet.getStartDate().plusDays(daysUntilNextDayOfWeek);
                 // Create a MealDTO with the selected recipe, meal type, and the day of the week as the name
                 MealDTO mealDTO = new MealDTO();
-                mealDTO.setRecipeId(selectedRecipe.getId());
+                mealDTO.setRecipe(selectedRecipe);
                 mealDTO.setUserId(user.getId());
                 mealDTO.setDate(nextDayOfWeek);
                 mealDTO.setName(daysOfWeek.get(i));
 
                 // Set the meal type as lunch or dinner
                 if (j == 0) {
-                    mealDTO.setMealTypeId(mealTypeRepository.findByName("Lunch").getId());
+                    mealDTO.setMealType(mealTypeRepository.findById(1L));
                 } else {
-                    mealDTO.setMealTypeId(mealTypeRepository.findByName("Dinner").getId());
+                    mealDTO.setMealType(mealTypeRepository.findById(2L));
                 }
 
                 // Add the created MealDTO to the weekly schedule
                 weeklySchedule[i][j] = mealDTO;
+                System.out.println(mealDTO);
                 createMeal(mealDTO);
 
             }
         }
 
-        return Arrays.stream(weeklySchedule)
-                .flatMap(Arrays::stream)
-                .collect(Collectors.toList());
+//        Arrays.stream(weeklySchedule)
+//                .flatMap(Arrays::stream)
+//                .collect(Collectors.toList());
     }
 
-    public List<MealDTO> generateWeeklySchedule(int meatPercentage, int fishPercentage, String userId) {
+    @Override
+    public void editMeal(Long id) {
+        MealDTO mealDTO = mapToMealDTO(mealRepository.findById(id).orElseThrow());
+        String recipeCategory = mealDTO.getRecipe().getCategory();
+        List<Recipe> categoryRecipes = recipeRepository.findByCategoryNameEquals(recipeCategory);
+        Collections.shuffle(categoryRecipes);
+        RecipeDTO selectedRecipe = recipeService.mapToRecipeDTO(categoryRecipes.removeFirst());
+        mealDTO.setRecipe(selectedRecipe);
+        createMeal(mealDTO);
 
-//        // Generate the weekly schedule based on the user's preferences and recipes
-//        List<Recipe> meatRecipes = new ArrayList<>();
-//        List<Recipe> fishRecipes = new ArrayList<>();
-//        for (Recipe recipe : recipes) {
-//            if (recipe.getCategory().getName().equals("meat")) {
-//                meatRecipes.add(recipe);
-//            } else if (recipe.getCategory().getName().equals("fish")) {
-//                fishRecipes.add(recipe);
-//            }
-//        }
-//
-//        // Generate the weekly schedule
-//        List<MealDTO> weeklySchedule = new ArrayList<>();
-//        Random random = new Random();
-//        for (int i = 0; i < 7; i++) {
-//            if (random.nextInt(100) < meatPercentage) {
-//                weeklySchedule.add(new MealDTO(meatRecipes.get(random.nextInt(meatRecipes.size()))));
-//            } else {
-//                weeklySchedule.add(new MealDTO(fishRecipes.get(random.nextInt(fishRecipes.size()))));
-//            }
-//        }
-
-        return null;
     }
 
 

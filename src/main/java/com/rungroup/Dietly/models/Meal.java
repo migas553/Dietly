@@ -33,5 +33,16 @@ public class Meal {
     @JoinColumn(name = "meal_types", nullable = false)
     private MealType mealType;
 
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "id=" + id +
+                ", date=" + date +
+                ", name='" + name + '\'' +
+                ", mealType=" + mealType.getName() +  // get only the name of the mealType
+                ", recipe=" + recipe.getName() +  // get only the name of the recipe
+                ", user=" + user.getUsername() +  // get only the username of the user
+                '}';
+    }
 
 }
