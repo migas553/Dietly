@@ -129,7 +129,7 @@ public class MealServiceImpl implements MealService {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 2; j++) {
                 // Select a recipe from the list of selected recipes
-//                System.out.println(diet);
+
                 RecipeDTO selectedRecipe = recipeService.mapToRecipeDTO(selectedRecipes.removeFirst());
                 LocalDate nextDayOfWeek;
                 int currentDayOfWeekIndex = diet.getStartDate().getDayOfWeek().getValue() % 7;

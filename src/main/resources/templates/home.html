@@ -1,10 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home</title>
 </head>
-<body>
+<body layout:fragment="body" class="d-flex flex-column h-100">
+<main>
+    <div class="row p-5 justify-content-center " id="banner">
+
+                <div class="col-10 col-md-8 col-lg-4 m-5 p-3 text-center bg-info-subtle rounded-4 align-content-center">
+                    <h1 class="text-primary ">The meal planner assistant for <span
+                            class="courgette-regular text-success">you </span>!</h1>
+                    <br>
+                    <p>Here you can find a lot of recipes and create your own diet plan with the click of a button,
+                        go ahead and try it out. </p>
+
+
+                    <a class="btn btn-info text-primary" th:href="@{/login}">Start your journey</a>
+                </div>
+                <div class="col-12 col-lg-5 m-5 "></div>
+        <br>
+    </div>
+    <div class="row bg-info-subtle p-5 justify-content-center">
+        <div class="col-12 col-md-3 m-3 text-center">
+            <h2 class="text-primary">Welcome to</h2>
+            <img th:src="@{/media/Dietly.png}" alt="logo" height="200">
+            <h1 class="text-success courgette-regular">Dietly</h1>
+        </div>
+        <div class="col-12 col-md-5 col-lg-5 m-5">
+            <h1 class="text-primary ">What is <span class="courgette-regular text-success">Dietly</span> ?</h1>
+            <br>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+            </p>
+            <br>
+            <a class="btn btn-info text-primary" th:href="@{/login}">Button maybe? </a>
+        </div>
+
+    </div>
+    <div class="row justify-content-center my-5">
+        <div class="col-12 col-md-10 text-center">
+            <h1 class="text-primary ">Why <span class="courgette-regular text-success">Dietly</span> ? </h1>
+
+            <div class="row mt-5 justify-content-around ">
+                <div class="col-md-4 col-lg-3 my-2 col-10">
+                    <div class="card bg-info-subtle">
+                        <div class="card-body text-center">
+                            <i class="bi bi-calendar2-week text-success" style="font-size: 2rem"></i>
+                            <h3 class="card-title text-primary ">Convenient</h3>
+                            <p class="text-info-emphasis">Its suppa convenient !</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3 my-2 col-10">
+                    <div class="card bg-info-subtle">
+                        <div class="card-body text-center ">
+                            <i class="bi bi-calendar2-week text-success" style="font-size: 2rem"></i>
+                            <h3 class="card-title text-primary ">Quick</h3>
+                            <p class="text-info-emphasis">Its suppa quick !</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3 my-2 col-10">
+                    <div class="card bg-info-subtle">
+                        <div class="card-body text-center ">
+                            <i class="bi bi-calendar2-week text-success" style="font-size: 2rem"></i>
+                            <h3 class="card-title text-primary ">Easy</h3>
+                            <p class="text-info-emphasis">Its suppa easy !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row justify-content-center my-5">
+        <div class="col-12 col-md-10 text-center">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+            </p>
+            <br>
+        </div>
+
+    </div>
+    <div class="row bg-primary p-5 justify-content-center ">
+        <div class="col-12 col-md-5 col-lg-5 m-5 align-content-center">
+            <h1 class="text-info ">Our <span class="courgette-regular text-success">Recipes</span></h1>
+            <br>
+            <p class="text-white">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+            </p>
+            <br>
+            <a class="btn btn-info text-primary" th:href="@{/login}">Button maybe? </a>
+        </div>
+        <div class="col-12 col-md-4 m-4 text-center align-content-center">
+            <img th:src="@{/media/Dish.png}" class="w-100"  alt="">
+        </div>
+    </div>
+    <div class="row bg-info-subtle p-5 justify-content-center">
+        <div class="col-12 col-md-5 m-3 text-center">
+            <img th:src="@{/media/Foods.png}" class="w-100" alt="logo" >
+        </div>
+        <div class="col-12 col-md-5 col-lg-5 m-5 align-content-center">
+            <h1 class="text-primary ">Improve your <span class="courgette-regular text-success">Diet</span> !</h1>
+            <br>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+                fermentum. Nullam nec purus ac libero ultricies fermentum. Nullam nec purus ac libero ultricies
+            </p>
+            <br>
+            <a class="btn btn-info text-primary" th:href="@{/login}">Button maybe? </a>
+        </div>
+
+    </div>
+
+
+
+</main>
 
 </body>
+
+
+
 </html>

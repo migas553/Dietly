@@ -1,5 +1,14 @@
 /*Fonts*/
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+
+.courgette-regular {
+    font-family: "Courgette", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
 
 .fira-sans-thin {
   font-family: "Fira Sans", sans-serif;
@@ -109,45 +118,56 @@
   font-style: italic;
 }
 /* Color-Pallet */
-:root{
-    --color1 :#12492f;
-    --color2 :#0a2f35;
-    --color3 :#f56038;
-    --color4 :#f7a325;
-    --color5 :#ffca7a;
-    --color6 :#ebf2f2;
-}
+:root {
+    /*--color1: hsl(149, 70%, 20%);*/
+    /*--color2: hsl(187, 60%, 20%);*/
+    /*--color3: hsl(14, 89%, 52%);*/
+    /*--color4: hsl(36, 89%, 52%);*/
+    /*--color5: hsl(36, 100%, 95%);*/
+    /*--color6: hsl(210, 100%, 98%);*/
 
-.text-color1{
-    color: var(--color1);
+
+    --color1: #12492f;
+    --color2: #0a2f35;
+    --color3: #f56038;
+    --color4: #f7a325;
+    --color5: #ffca7a;
+    --color6: #ebf2f2;
+
 }
-.text-color2{
-    color: var(--color2);
-}
-.text-color3{
-    color: var(--color3);
-}
-.text-color4{
-    color: var(--color4);
-}
-.text-color5{
-    color: var(--color5);
-}
-.bg-color1{
-    background-color: var(--color1);
-}
-.bg-color2{
-    background-color: var(--color2);
-}
-.bg-color3{
-    background-color: var(--color3);
-}
-.bg-color4{
-    background-color: var(--color4);
-}
-.bg-color5{
-    background-color: var(--color5);
-}
+/*.text-color1{*/
+/*    color: var(--color1);*/
+/*}*/
+/*.text-color2{*/
+/*    color: var(--color2);*/
+/*}*/
+/*.text-color3{*/
+/*    color: var(--color3);*/
+/*}*/
+/*.text-color4{*/
+/*    color: var(--color4);*/
+/*}*/
+/*.text-color5{*/
+/*    color: var(--color5);*/
+/*}*/
+/*.bg-color1{*/
+/*    background-color: var(--color1);*/
+/*}*/
+/*.bg-color2{*/
+/*    background-color: var(--color2);*/
+/*}*/
+/*.bg-color3{*/
+/*    background-color: var(--color3);*/
+/*}*/
+/*.bg-color4{*/
+/*    background-color: var(--color4);*/
+/*}*/
+/*.bg-color5{*/
+/*    background-color: var(--color5);*/
+/*}*/
+/*.bg-color6{*/
+/*    background-color: var(--color6);*/
+/*}*/
 
 
 /* General */
@@ -156,5 +176,28 @@ body {
   font-family: "Fira Sans", sans-serif;
   font-weight: 400;
   font-style: normal;
-  background-color: var(--color6);
+  background-color: var(--bs-white);
+
+
+}
+
+div {
+  /*border : 1px solid red;*/
+}
+
+#banner {
+  height:60vh;
+  background-image: url(../media/banner.png);
+  background-size: cover;
+
+}
+
+@media (max-width: 768px) {
+  #banner {
+    height: 100vh;
+    background-position: center;
+    background-size: cover;
+    justify-content: center;
+    align-content: center;
+  }
 }
