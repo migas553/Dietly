@@ -133,6 +133,7 @@
     --color4: #f7a325;
     --color5: #ffca7a;
     --color6: #ebf2f2;
+    --color-body: hsl(36, 100%, 99%);
 
 }
 /*.text-color1{*/
@@ -176,7 +177,7 @@ body {
   font-family: "Fira Sans", sans-serif;
   font-weight: 400;
   font-style: normal;
-  background-color: var(--bs-white);
+  background-color:  var(--color-body);
 
 
 }
@@ -184,6 +185,7 @@ body {
 div {
   /*border : 1px solid red;*/
 }
+
 
 #banner {
   height:60vh;
@@ -200,4 +202,7 @@ div {
     justify-content: center;
     align-content: center;
   }
+}
+.color-body {
+  background-color: var(--color-body);
 }

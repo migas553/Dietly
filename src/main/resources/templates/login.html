@@ -6,40 +6,68 @@
 <head>
     <title>Login</title>
 </head>
-<body layout:fragment="body" class="d-flex flex-column h-100">
-<main class="flex-shrink-0">
-    <!--  Register Form  -->
-    <section class="py-5">
-        <div class="container px-5 my-5">
-            <div class="text-center mb-5">
-                <h1 class="fw-bolder"> Login </h1>
-                <p class="lead fw-normal text-muted mb-0">Enter your credentials</p>
-                <div th:if="${param.success}" class="alert alert-success">
-                    You are now ready to login !
-                </div>
-                <div thg:if="${param.logout}">
-                    <p class="text-danger">You are now logged out</p>
-                </div>
-                <div thg:if="${param.error}">
-                    <p class="text-danger">Invalid username and password.</p>
-                </div>
-                <form method="post" role="form" th:action="@{/login}">
+<body layout:fragment="body" class="d-flex flex-column " style="min-height: 100vh;
+                                                            background:
+                                                            linear-gradient(to left, #7dc383 50%, #ffffff 50%);">
+<main class="flex-shrink-0 ">
 
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="mb-3">
-                            <button th:href="@{/login}" type="submit" class="btn btn-primary">Register</button>
-                        </div>
-                </form>
+
+    <div class="row justify-content-center" style="margin-top: 20vh">
+<!--        Left side-->
+        <div class="col-10 col-md-3
+                    m-5 p-5 ">
+
+            <div class="justify-content-end">
+                <h1 class="text-primary ">Welcome to <span class="courgette-regular text-success"> Dietly </span></h1>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque. Velit euismod in pellentesque massa placerat duis. Suspendisse potenti nullam ac tortor vitae purus. Velit scelerisque in dictum
+                </p>
+                <br>
+                <a th:href="@{/register}" type="submit" class="btn btn-primary text-center">Register</a>
             </div>
+
+
         </div>
-    </section>
+<!--        Center image-->
+        <div class="col-5 col-md-2 align-content-center">
+            <img th:src="@{/media/bowl.png}" alt="login" class="w-100">
+        </div>
+
+<!--        Right side-->
+        <div class="col-10 col-md-3
+                    m-5 p-5 shadow
+                    rounded-5 bg-light-subtle border border-info">
+
+            <div class="col-10 col-md-2">
+                <h1 class="text-primary">Login</h1>
+            </div>
+
+
+            <div th:if="${param.error}">
+                <p class="text-danger">Invalid username or password.</p>
+            </div>
+
+
+            <form method="post" role="form" th:action="@{/login}">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3 text-center">
+                    <button th:href="@{/login}" type="submit" class="btn btn-primary">Login</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
 
 
 

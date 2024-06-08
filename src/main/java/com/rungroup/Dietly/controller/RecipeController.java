@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,6 +53,7 @@ public class RecipeController {
         }
 
         model.addAttribute("isAdmin", isAdmin);
+
         List<RecipeDTO> recipes = recipeService.getAllRecipes();
         model.addAttribute("recipes", recipes);
         return "recipes";
@@ -158,6 +158,17 @@ public class RecipeController {
     }
     @GetMapping("/recipes/{recipeID}")
     public String viewRecipe(@PathVariable Long recipeID, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = false;
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Collection<? extends GrantedAuthority> authorities =
+                    ((UserDetails) authentication.getPrincipal()).getAuthorities();
+            isAdmin = authorities.stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
         RecipeDTO recipe = recipeService.getRecipeById(recipeID);
         model.addAttribute("recipe", recipe);
         return "recipe-show";

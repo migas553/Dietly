@@ -10,33 +10,85 @@
 <main class="flex-shrink-0">
     <!-- Page Content-->
     <section>
-        <div class="container px-5 my-5">
-            <div class="mb-5"
-                th:action="@{/recipes/{recipeId}(recipeId=${recipe.id})}"
-                th:object="${recipe}">
-                <h1 th:text="*{name}"></h1>
-                <p class="text-muted mb-0" th:text="*{description}"></p>
+        <div class="container my-5
+                     bg-info-subtle border border-warning-subtle rounded-5"
+             th:action="@{/recipes/{recipeId}(recipeId=${recipe.id})}"
+             th:object="${recipe}">
+<!--title-->
+            <div class="row justify-content-center" >
+                <div class="col-lg-8 p-5 mt-5
+                            text-center rounded-5 bg-white border border-warning-subtle shadow-sm
+                            ">
+<!--                    name -->
+                    <h1 class="text-primary" th:text="*{name}"></h1>
 
+<!--                    Servings -->
+                    <div class="row justify-content-center">
+                        <div class="col-lg-3">
+                            <p class="lead fw-normal text-muted mb-0"><i class="fa-solid fa-utensils"></i>  <span
+                                    th:text="*{servings}"></span></p>
+                        </div>
 
+<!--                        prep time-->
+                        <div class="col-lg-3">
+                            <p class="lead fw-normal text-muted mb-0"><i class="bi bi-clock-history"></i> : <span
+                                    th:text="*{prepTime}"></span></p>
+                        </div>
 
-                <p class="lead fw-normal text-muted mb-0" th:text="*{servings}"></p>
-                <p class="lead fw-normal text-muted mb-0" th:text="*{prepTime}"></p>
-                <p class="lead fw-normal text-muted mb-0" th:text="*{category}"></p>
-                <img th:src="*{imageUrl}" alt="Current Image" width="200" height="200">
+<!--                     Category -->
+                        <div class="col-lg-3  ">
+                            <p class="text-primary">
+                                <i class="fa-solid fa-drumstick-bite text-warning" th:if="${recipe.category} == 'Meat'"></i>
+                                <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)"
+                                   th:if="${recipe.category} == 'Fish'"></i>
+                                <i class="fa-solid fa-leaf text-success" th:if="${recipe.category} == 'Vegetarian'"></i>
+                                <span th:text="*{category}"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+<!--        Recipe- details -->
+            </div>
+            <div class="row my-5">
+<!--                Imagem -->
+                <div class="col-lg-4 col-11 p-5 align-content-center" style="border-right: solid 1px var(--bs-info)">
+                    <div>
+                        <p class="text-muted text-center" th:text="*{description}"></p>
+                    </div>
+                    <div>
+                        <img th:src="*{imageUrl}"  class="w-100 rounded-5 border border-warning-subtle shadow-lg"
+                             alt="Current Image">
+                    </div>
+                </div>
+
+                <div class="col-11 col-lg-7 p-5 m-2 ">
+                    <h3 class="text-success courgette-regular">Ingredients</h3>
                 <ul>
                     <li th:each="ingredient : *{ingredients}"
                         th:text="${ingredient}"
-                        class="text-info"></li>
+                        class="text-secondary"></li>
                 </ul>
-                <h3 class="text-secondary">Instructions</h3>
-                <p th:each="instruction : *{instructions}"
-                   th:text="${instruction}"
-                   class="text-secondary"></p>
-                <a class="btn btn-primary" href="/recipes">Back to Recipes</a>
-                <p class="lead fw-normal text-muted mb-0" th:text="*{createdOn}"></p>
+
+                <h3 class="text-success courgette-regular">Instructions</h3>
+                    <ol>
+                        <li th:each="instruction : *{instructions}"
+                           th:text="${instruction}"
+                           class="text-secondary"></li>
+                    </ol>
+                </div>
+
+
+                <br>
+
 
             </div>
         </div>
+        <a class="text-dark btn btn-success w-100 my-5"
+           th:href="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}" th:if="${isAdmin}">Edit
+            recipe</a>
+
+
     </section>
     <script>
 

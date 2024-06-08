@@ -7,97 +7,154 @@
     <title>Edit Recipe</title>
 </head>
 <body layout:fragment="body" class="d-flex flex-column h-100">
-<main class="flex-shrink-0">
-    <!-- Page Content-->
-    <section  class="py-5">
-        <div class="container px-5 my-5">
-            <div class="text-center mb-5">
-                <h1 class="fw-bolder">EDIT Recipe</h1>
-                <p class="lead fw-normal text-muted mb-0">Create a new recipe</p>
-                <form enctype="multipart/form-data" method="post" role="form"
-                      th:action="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}"
-                      th:object="${recipe}">
-                    <input type="hidden" th:field="*{id}">
 
+    <!-- Page Content-->
+
+<main class="flex-shrink-0">
+<!-- Page Content-->
+
+    <form role="form" method="post" th:action="@{/recipes/new}" th:object="${recipe}" enctype="multipart/form-data">
+        <div class="container my-5
+             bg-info-subtle border border-warning-subtle rounded-5">
+            <!--title-->
+            <div class="row justify-content-center mt-5" >
+                <div class="text-center">
+                    <h1 class="text-primary fw-bold courgette-regular">Edit
+                        <span class=" text-success">Recipe</span></h1>
+                    <p class="">Create a new recipe</p>
+                </div>
+                <div class="col-lg-8 p-5 mt-5
+                    text-center rounded-5 bg-white border border-warning-subtle shadow-sm
+                    ">
+                    <!--                    name -->
+                    <h1 class="text-primary" th:text="*{name}"></h1>
                     <div class="mb-3">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
-                            <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
+                        <label for="name" class="form-label" hidden>Name</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required placeholder="Name">
+                        <!--                        Errors -->
+                        <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                        <p class="error" th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                        <p class="error" th:field="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                        <p class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
+                    </div>
+
+
+                    <div class="row  justify-content-center">
+                        <!--                Servings-->
+                        <div class="col-lg-4 align-items-center justify-content-center row" >
+                            <div class="col-2">
+                                <i class="fa-solid fa-utensils"></i>
+                            </div>
+                            <div class="col-7">
+                                <label for="servings" class="form-label" hidden>Servings</label>
+                                <input min="0" type="number" class="form-control" id="servings" th:field="*{servings}"
+                                       required
+                                       placeholder="Servings">
+                            </div>
+                        </div>
+                        <!--                PrepTime-->
+                        <div class="col-lg-4 align-items-center justify-content-center row" >
+                            <div class="col-4">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <div class="col-7">
+                                <label for="prepTime" class="form-label" hidden>Servings</label>
+                                <input min="0" type="number" class="form-control" id="prepTime" th:field="*{prepTime}"
+                                       required
+                                       placeholder="Servings">
+                            </div>
+                        </div>
+                        <!--                Category -->
+                        <div class="col-lg-4 align-items-center justify-content-center row" >
+                            <div class="col-4">
+                                <i class="fa-solid fa-burger"></i>
+                            </div>
+                            <div class="col-7">
+                                <label for="category" class="form-label" hidden>Servings</label>
+                                <select class="form-control" id="category" th:field="*{category}" required>
+                                    <option value="">Select a tag</option>
+                                    <option value="Meat">Meat</option>
+                                    <option value="Fish">Fish</option>
+                                    <option value="Vegetarian">Vegetarian</option>
+                                </select>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-5">
+                    <!--                Imagem -->
+                    <div class="col-lg-4 col-11 p-5 align-content-center" style="border-right: solid 1px var(--bs-info)">
+                        <div>
+                            <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                            <div class="mb-3">
+                                <label for="description" class="form-label" hidden="">Description</label>
+                                <textarea class="form-control" id="description" th:field="*{description}" required
+                                          placeholder="Description"
+                                ></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Image</label>
+                                <img id="imagePreview" src="#" alt="Image Preview" class="w-100 rounded-5 border border-warning-subtle shadow-lg"
+                                     style="display: none;"/>
+                                <br>
+                                <input type="file" class="form-control" id="image" name="image" required accept="image/*" onchange="previewImage(event)">
+                            </div>
+                            <br>
+                            <p>Current picture:</p>
+                            <img th:src="*{imageUrl}"  class="w-100 rounded-5 border border-warning-subtle shadow-lg"
+                                 alt="Current Image">
+                        </div>
+                    </div>
+
+                    <div class="col-11 col-lg-7 p-5 m-2 ">
+                        <h3 class="text-success courgette-regular">Ingredients</h3>
+
+                        <div class="my-1" id="ingredients">
+                            <th:block th:each="ingredient, iterStat : ${recipe.ingredients}">
+                                <label th:for="${'instruction' + iterStat.index}" class="form-label" hidden="">Ingredient 1</label>
+                                <input type="text" class="form-control ingredient-input my-2"
+                                       th:id="${'ingredient' + iterStat.index}" th:value="${ingredient}" required>
+                                <p class="error" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}"></p>
+                            </th:block>
+                        </div>
+                        <button type="button" id="addIngredient" class="btn btn-secondary my-2">Add another
+                            ingredient</button>
+                        <input type="hidden" id="ingredientsJson" th:field="*{ingredients}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-11">
+                        <h3 class="text-success courgette-regular mt-5">Instructions</h3>
+                        <div class="my-3" id="instructions">
+                            <th:block th:each="instruction, iterStat : ${recipe.instructions}">
+                                <label th:for="${'instruction' + iterStat.index}" class="form-label"
+                                       hidden="">Instruction 1</label>
+                                <textarea class=" my-2 form-control instruction-input" th:id="${'instruction' + iterStat.index}" required th:text="${instruction}"
+                                          placeholder="Instruction 1" ></textarea>
+                                <p class="error" th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}"></p>
                         </div>
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
-                        <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Name Error</p>
+                        <button type="button" id="addInstruction" class="btn btn-secondary my-2">Add another
+                            instruction</button>
+                        <input type="hidden" id="instructionsJson" th:field="*{instructions}">
                     </div>
-                    <div class="mb-3">
-                        <label for="servings" class="form-label">Servings</label>
-                        <input type="number" class="form-control" id="servings" th:field="*{servings}" required>
-                        <p class="text-danger" th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}">Name Error</p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="prepTime" class="form-label">Preparation Time</label>
-                        <input type="number" class="form-control" id="prepTime" th:field="*{prepTime}" required>
-                        <p class="text-danger" th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}">Preparation Time Error</p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="tag" class="form-label">Tag</label>
-                        <select class="form-control" id="tag" th:field="*{category}" required>
-                            <option value="">Select a tag</option>
-                            <option value="Meat">Meat</option>
-                            <option value="Fish">Fish</option>
-                            <option value="Vegetarian">Vegetarian</option>
-                        </select>
-                        <p class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Tag
-                            Error</p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Current Image</label>
-                        <img th:src="*{imageUrl}" alt="Current Image" width="200" height="200">
-                    </div>
-                    <div class="mb-3">
-                        <label for="newImage" class="form-label">Change Image</label>
-                        <input type="file" class="form-control" id="newImage" name="newImage" accept="image/*">
-                    </div>
-                    <div id="ingredients">
-                        <th:block th:each="ingredient, iterStat : ${recipe.ingredients}">
-                            <div class="mb-3">
-                                <label th:for="${'ingredient' + iterStat.index}" class="form-label">Ingredient</label>
-                                <label>
-                                    <input type="text" class="form-control ingredient-input" th:id="${'ingredient' + iterStat.index}" th:value="${ingredient}" required>
-                                </label>
-                            </div>
-                        </th:block>
-                        <p class="text-danger" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Ingredients Error</p>
-                    </div>
-                    <button type="button" id="addIngredient" class="btn btn-secondary">Add another ingredient</button>
+                </div>
 
-                    <div id="instructions">
-                        <th:block th:each="instruction, iterStat : ${recipe.instructions}">
-                            <div class="mb-3">
-                                <label th:for="${'instruction' + iterStat.index}" class="form-label">Instruction</label>
-                                <label>
-                                    <textarea class="form-control instruction-input" th:id="${'instruction' + iterStat.index}" required th:text="${instruction}"></textarea>
-                                </label>
-                            </div>
-                        </th:block>
-                        <p class="text-danger" th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}">Instructions Error</p>
-                    </div>
-                    <button type="button" id="addInstruction" class="btn btn-secondary">Add another instruction</button>
+                <
+                <button type="submit" class="btn btn-primary m-2  w-50">Submit</button>
+                <button type="button" class="btn btn-warning m-2 w-50" id="deleteButton"
+                        th:data-id="${recipe.id}">Delete
+                </button>
 
-
-                    <input type="hidden" id="ingredientsJson" th:field="*{ingredients}">
-                    <input type="hidden" id="instructionsJson" th:field="*{instructions}">
-
-                    <br>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-danger" id="deleteButton" th:data-id="${recipe.id}">Delete</button>
-                </form>
             </div>
-        </div>
-    </section>
-    <script>
+
+            <script>
         let ingredientCount = document.getElementsByClassName('ingredient-input').length;
         let instructionCount = document.getElementsByClassName('instruction-input').length;
 
@@ -119,9 +176,9 @@
             let newInstruction = document.createElement('div');
             newInstruction.innerHTML = `
                             <div class="mb-3">
-                                <label for="instruction${instructionCount}" class="form-label">Instruction ${instructionCount}</label>
-                                <textarea class="form-control instruction-input" id="instruction${instructionCount}" required></textarea>
-                                <button type="button" class="btn btn-danger remove-instruction">Remove</button>
+                                <label for="instruction${instructionCount}" class="form-label"></label>
+                                <textarea class="form-control instruction-input" id="instruction${instructionCount}" required placeholder="Instruction ${instructionCount}"></textarea>
+                                <button type="button" class="btn btn-warning remove-instruction">Remove</button>
                             </div>
                         `;
             document.getElementById('instructions').appendChild(newInstruction);

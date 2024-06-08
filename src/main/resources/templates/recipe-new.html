@@ -10,68 +10,135 @@
 
 <main class="flex-shrink-0">
     <!-- Page Content-->
-    <section  class="py-5">
-        <div class="container px-5 my-5">
-            <div class="text-center mb-5">
-                <h1 class="fw-bolder">New Recipe</h1>
-                <p class="lead fw-normal text-muted mb-0">Create a new recipe</p>
-                <form role="form" method="post" th:action="@{/recipes/new}" th:object="${recipe}" enctype="multipart/form-data">
+
+    <section>
+        <form role="form" method="post" th:action="@{/recipes/new}" th:object="${recipe}" enctype="multipart/form-data">
+        <div class="container my-5
+                     bg-info-subtle border border-warning-subtle rounded-5">
+            <!--title-->
+            <div class="row justify-content-center mt-5" >
+                <div class="text-center">
+                    <h1 class="text-primary fw-bold courgette-regular">New <span class=" text-success">Recipe</h1>
+                    <p class="">Create a new recipe</p>
+                </div>
+                <div class="col-lg-8 p-5 mt-5
+                            text-center rounded-5 bg-white border border-warning-subtle shadow-sm
+                            ">
+                    <!--                    name -->
+                    <h1 class="text-primary" th:text="*{name}"></h1>
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        <label for="name" class="form-label" hidden>Name</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required
+                               placeholder="Name">
+<!--                        Errors -->
                         <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
-                        <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="servings" class="form-label">Servings</label>
-                        <input type="number" class="form-control" id="servings" th:field="*{servings}" required>
                         <p class="error" th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}"></p>
+                        <p class="error" th:field="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                        <p class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
+            </div>
+
+
+            <div class="row  justify-content-center">
+<!--                Servings-->
+                <div class="col-lg-4 align-items-center justify-content-center row" >
+                    <div class="col-2">
+                        <i class="fa-solid fa-utensils"></i>
                     </div>
-                    <div class="mb-3">
-                        <label for="prepTime" class="form-label">Preparation Time</label>
-                        <input type="text" class="form-control" id="prepTime" th:field="*{prepTime}" required>
-                        <p class="error" th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}"></p>
+                    <div class="col-7">
+                    <label for="servings" class="form-label" hidden>Servings</label>
+                    <input min="0" type="number" class="form-control" id="servings" th:field="*{servings}"
+                           required
+                           placeholder="Servings">
                     </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Tag</label>
+                </div>
+<!--                PrepTime-->
+                <div class="col-lg-4 align-items-center justify-content-center row" >
+                    <div class="col-4">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div class="col-7">
+                        <label for="prepTime" class="form-label" hidden>Servings</label>
+                        <input min="0" type="number" class="form-control" id="prepTime" th:field="*{prepTime}"
+                               required
+                               placeholder="Servings">
+                    </div>
+                </div>
+<!--                Category -->
+                <div class="col-lg-4 align-items-center justify-content-center row" >
+                    <div class="col-4">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <div class="col-7">
+                        <label for="category" class="form-label" hidden>Servings</label>
                         <select class="form-control" id="category" th:field="*{category}" required>
                             <option value="">Select a tag</option>
                             <option value="Meat">Meat</option>
                             <option value="Fish">Fish</option>
                             <option value="Vegetarian">Vegetarian</option>
                         </select>
-                        <p class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Image</label>
-                        <input type="file" class="form-control" id="image" name="image" required accept="image/*">
-                    </div>
-                    <div class="mb-3" id="ingredients">
-                        <label for="ingredient1" class="form-label">Ingredient 1</label>
-                        <input type="text" class="form-control ingredient-input" id="ingredient1" required>
-                        <p class="error" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}"></p>
-                    </div>
-                    <button type="button" id="addIngredient" class="btn btn-secondary">Add another ingredient</button>
 
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="row my-5">
+                <!--                Imagem -->
+                <div class="col-lg-4 col-11 p-5 align-content-center" style="border-right: solid 1px var(--bs-info)">
+                    <div>
+                        <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                        <div class="mb-3">
+                            <label for="description" class="form-label" hidden="">Description</label>
+                            <textarea class="form-control" id="description" th:field="*{description}" required
+                                      placeholder="Description"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image</label>
+                            <img id="imagePreview" src="#" alt="Image Preview" class="w-100 rounded-5 border border-warning-subtle shadow-lg"
+                                 style="display: none;"/>
+                            <br>
+                            <input type="file" class="form-control" id="image" name="image" required accept="image/*" onchange="previewImage(event)">
+                        </div>
+<!--                        <img th:src="*{imageUrl}"  class="w-100 rounded-5 border border-warning-subtle shadow-lg"-->
+<!--                             alt="Current Image">-->
+                    </div>
+                </div>
+
+                <div class="col-11 col-lg-7 p-5 m-2 ">
+                    <h3 class="text-success courgette-regular">Ingredients</h3>
+
+                        <div class="mb-3" id="ingredients">
+                            <label for="ingredient1" class="form-label" hidden="">Ingredient 1</label>
+                            <input type="text" class="form-control ingredient-input" id="ingredient1"
+                                   placeholder="Ingredient 1" required>
+                            <p class="error" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}"></p>
+                        </div>
+                        <button type="button" id="addIngredient" class="btn btn-secondary">Add another ingredient</button>
+                        <input type="hidden" id="ingredientsJson" th:field="*{ingredients}">
+
+
+
+                    <h3 class="text-success courgette-regular mt-5">Instructions</h3>
                     <div class="mb-3" id="instructions">
-                        <label for="instruction1" class="form-label">Instruction 1</label>
-                        <textarea class="form-control instruction-input" id="instruction1" required></textarea>
+                        <label for="instruction1" class="form-label" hidden="">Instruction 1</label>
+                        <textarea class="form-control instruction-input" id="instruction1" required
+                                  placeholder="Instruction 1"></textarea>
                         <p class="error" th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}"></p>
                     </div>
                     <button type="button" id="addInstruction" class="btn btn-secondary">Add another instruction</button>
 
 
-                    <input type="hidden" id="ingredientsJson" th:field="*{ingredients}">
+
                     <input type="hidden" id="instructionsJson" th:field="*{instructions}">
 
                     <br>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                    <button type="submit" class="btn btn-primary mt-5 w-50 ">Submit</button>
+
+                </div>
                 <script>
                     let ingredientCount = 1;
                     let instructionCount = 1;
@@ -80,8 +147,8 @@
                         ingredientCount++;
                         let newIngredient = document.createElement('div');
                         newIngredient.innerHTML = `
-                            <label for="ingredient${ingredientCount}" class="form-label">Ingredient ${ingredientCount}</label>
-                            <input type="text" class="form-control ingredient-input" id="ingredient${ingredientCount}" required>
+                            <label for="ingredient${ingredientCount}" class="form-label" hidden="">Ingredient ${ingredientCount}</label>
+                            <input type="text" class="form-control ingredient-input my-1" id="ingredient${ingredientCount}" placeholder="Ingredient ${ingredientCount}" required>
                         `;
                         document.getElementById('ingredients').appendChild(newIngredient);
                     } );
@@ -90,8 +157,8 @@
                         instructionCount++;
                         let newInstruction = document.createElement('div');
                         newInstruction.innerHTML = `
-                            <label for="instruction${instructionCount}" class="form-label">Instruction ${instructionCount}</label>
-                            <textarea class="form-control instruction-input" id="instruction${instructionCount}" required></textarea>
+                            <label for="instruction${instructionCount}" hidden="" class="form-label">Instruction ${instructionCount}</label>
+                            <textarea class="form-control instruction-input my-1" id="instruction${instructionCount}" required placeholder="Ingredient ${instructionCount}"></textarea>
                         `;
                         document.getElementById('instructions').appendChild(newInstruction);
                     });
@@ -103,11 +170,15 @@
                         document.getElementById('ingredientsJson').value = JSON.stringify(ingredients);
                         document.getElementById('instructionsJson').value = JSON.stringify(instructions);
                     });
-
                 </script>
-                </div>
+
+
+                <br>
+
+
             </div>
-        </section>
+        </div>
+
     </main>
     </body>
     </html>

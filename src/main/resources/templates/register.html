@@ -6,14 +6,38 @@
 <head>
     <title>Edit Recipe</title>
 </head>
-<body layout:fragment="body" class="d-flex flex-column h-100">
-<main class="flex-shrink-0">
-<!--  Register Form  -->
-    <section class="py-5">
-        <div class="container px-5 my-5">
-            <div class="text-center mb-5">
-                <h1 class="fw-bolder"> Register </h1>
-                <p class="lead fw-normal text-muted mb-0">Create a new account</p>
+
+<body layout:fragment="body" class="d-flex flex-column " style="min-height: 100vh;
+                                                            background:
+                                                            linear-gradient(to left, #7dc383 50%, #ffffff 50%);">
+<main class="flex-shrink-0 ">
+
+
+    <div class="row justify-content-center " style="margin-top: 10vh">
+        <!--        Left side-->
+        <div class="col-10 col-md-3
+                    m-5 p-5  align-content-center">
+                <h1 class="text-primary ">Thank you for choosing
+                    <span class="courgette-regular text-success"> Dietly </span></h1>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque. Velit euismod in pellentesque massa placerat duis. Suspendisse potenti nullam ac tortor vitae purus. Velit scelerisque in dictum
+                </p>
+        </div>
+        <!--        Center image-->
+        <div class="col-5 col-md-2 align-content-center">
+            <img th:src="@{/media/bowl.png}" alt="login" class="w-100">
+        </div>
+
+        <!--        Right side-->
+        <div class="col-10 col-md-3
+                    m-5 p-5 shadow
+                    rounded-5 bg-light-subtle border border-info">
+
+                <h1 class="text-primary">Register</h1>
+                <p class="text-muted small">Create a new account</p>
+
+            <form method="post" role="form" th:action="@{/login}">
+
                 <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
                     <th:block th:if="${#fields.hasErrors('*')}">
                         <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
@@ -36,12 +60,11 @@
                             <input type="text" class="form-control" id="username" th:field="*{username}" required>
                             <p class="text-danger" th:if="${#fields.hasErrors('username')}"
                                th:errors="*{username}">Username Error</p>
+                        </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" th:field="*{email}" required>
                             <p class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</p>
-
-
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -49,14 +72,14 @@
                             <p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</p>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 text-center">
                             <button type="submit" class="btn btn-primary">Register</button>
                         </div>
-                    </form>
-            </div>
-        </div>
-    </section>
+                </form>
 
+            </form>
+        </div>
+    </div>
 
 
 </main>
