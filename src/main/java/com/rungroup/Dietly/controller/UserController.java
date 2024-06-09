@@ -13,7 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -34,7 +39,13 @@ public class UserController {
         UserEntity user = userService.findByUsername(getUsername.getUsername());
         DietDTO diet = new DietDTO();
         List<MealDTO> meals = mealService.getAllMeals(user);
-        model.addAttribute("meals", meals);
+        List<MealDTO> sortedMeals = meals.stream()
+                .sorted(Comparator.comparing(MealDTO::getDate))
+                .collect(Collectors.toList());
+
+        Map<LocalDate, List<MealDTO>> mealsByDate = sortedMeals.stream()
+                .collect(Collectors.groupingBy(MealDTO::getDate, LinkedHashMap::new, Collectors.toList()));
+        model.addAttribute("mealsByDate", mealsByDate);
         model.addAttribute("diet", diet);
         model.addAttribute("user", user);
         return "user";

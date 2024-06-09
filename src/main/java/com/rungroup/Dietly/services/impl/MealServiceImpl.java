@@ -78,7 +78,7 @@ public class MealServiceImpl implements MealService {
     @Transactional
     @Override
     public void generateSchedule(DietDTO diet, UserEntity user) {
-
+        mealRepository.deleteAllByDateBefore(LocalDate.now());
         // Calculate the total number of meals
         int totalMeals = 14;
 
