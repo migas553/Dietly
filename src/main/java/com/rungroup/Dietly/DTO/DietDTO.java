@@ -2,6 +2,7 @@ package com.rungroup.Dietly.DTO;
 
 
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,8 @@ public class DietDTO {
     private int fishPercentage;
     private int vegetablePercentage;
     private int meatPercentage;
-    @FutureOrPresent
+    @NotNull
+    @FutureOrPresent(message = "Date must be in the future or present")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDate;
 

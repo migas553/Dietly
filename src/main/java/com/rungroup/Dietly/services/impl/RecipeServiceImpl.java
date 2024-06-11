@@ -60,6 +60,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void updateRecipe(RecipeDTO recipeDTO) {
+        System.out.println(recipeDTO);
         Recipe recipe = mapToRecipe(recipeDTO);
        if (recipe.getId() != null && recipeRepository.existsById(recipe.getId())) {
             recipeRepository.save(recipe);

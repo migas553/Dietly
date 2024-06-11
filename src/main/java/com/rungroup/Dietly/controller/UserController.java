@@ -35,10 +35,10 @@ public class UserController {
 
     @GetMapping("/user")
     public String user(Model model) {
-        User getUsername = userService.getCurrentUser();
-        UserEntity user = userService.findByUsername(getUsername.getUsername());
+        User user = userService.getCurrentUser();
+        UserEntity currentUser = userService.findByUsername(user.getUsername());
         DietDTO diet = new DietDTO();
-        List<MealDTO> meals = mealService.getAllMeals(user);
+        List<MealDTO> meals = mealService.getAllMeals(currentUser);
         List<MealDTO> sortedMeals = meals.stream()
                 .sorted(Comparator.comparing(MealDTO::getDate))
                 .collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class UserController {
                 .collect(Collectors.groupingBy(MealDTO::getDate, LinkedHashMap::new, Collectors.toList()));
         model.addAttribute("mealsByDate", mealsByDate);
         model.addAttribute("diet", diet);
-        model.addAttribute("user", user);
+        model.addAttribute("user", currentUser);
         return "user";
     }
 }

@@ -36,16 +36,16 @@ public class AuthController{
                                Model model) {
         UserEntity existingEmail = userService.findByEmail(user.getEmail());
         UserEntity existingUsername = userService.findByUsername(user.getUsername());
-        if (existingEmail != null || existingUsername != null) {
-            result.reject("email.exists", "There is already an account registered with that username or email");
-            System.out.println("There is already an account registered with that username or email");
+        if (existingEmail != null) {
+            result.rejectValue("email", "email.exists", "There is already an account registered with that email");
+        }
+        if (existingUsername != null) {
+            result.rejectValue("username", "username.exists", "There is already an account registered with that username");
         }
         if (result.hasErrors()) {
             model.addAttribute("user", user);
-            System.out.printf("Error: %s%n", result.toString());
             return "register";
         }
-        System.out.println("Saving user: " + user.toString());
 
         userService.saveUser(user);
         boolean registrationSuccess = userService.saveUser(user);

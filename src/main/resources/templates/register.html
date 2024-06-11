@@ -50,9 +50,9 @@
 
 
                 <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
-                    <th:block th:if="${#fields.hasErrors('*')}">
-                        <p class="text-danger" th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-                    </th:block>
+<!--                    <th:block th:if="${#fields.hasErrors('*')}">-->
+<!--                        <p class="text-danger" th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>-->
+<!--                    </th:block>-->
                     <div class="mb-3">
                         <div class="mb-3">
                             <label for="firstName" class="form-label">First Name</label>

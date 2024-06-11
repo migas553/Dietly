@@ -19,6 +19,7 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
     private LocalDate date;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

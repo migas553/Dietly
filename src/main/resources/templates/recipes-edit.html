@@ -13,7 +13,9 @@
 <main class="flex-shrink-0">
 <!-- Page Content-->
 
-    <form role="form" method="post" th:action="@{/recipes/new}" th:object="${recipe}" enctype="multipart/form-data">
+    <form role="form" method="post" th:action="@{/recipes/edit/{recipeId}(recipeId=${recipe.id})}"
+          th:object="${recipe}" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
         <div class="container my-5
              bg-info-subtle border border-warning-subtle rounded-5">
             <!--title-->
@@ -102,7 +104,7 @@
                                 <img id="imagePreview" src="#" alt="Image Preview" class="w-100 rounded-5 border border-warning-subtle shadow-lg"
                                      style="display: none;"/>
                                 <br>
-                                <input type="file" class="form-control" id="image" name="image" required accept="image/*" onchange="previewImage(event)">
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" onchange="previewImage(event)">
                             </div>
                             <br>
                             <p>Current picture:</p>

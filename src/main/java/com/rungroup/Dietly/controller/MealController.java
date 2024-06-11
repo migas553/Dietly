@@ -10,11 +10,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -31,16 +33,22 @@ public class MealController {
     }
 
     @PostMapping("/generateSchedule")
-    public String generateSchedule(@Valid @ModelAttribute DietDTO diet
-    ) {
-        User getUsername = userService.getCurrentUser();
-        UserEntity user = userService.findByUsername(getUsername.getUsername());
-        mealService.generateSchedule(diet, user);
-
-
-
-        return "redirect:/user";
+    public String generateSchedule(@Valid @ModelAttribute DietDTO diet, BindingResult result) {
+        if (result.hasErrors()) {
+            // handle validation errors
+            // you can add the errors to the model and return the form view
+            return "recipes";
+        } else {
+            // save the diet
+            System.out.println(diet);
+            User getUsername = userService.getCurrentUser();
+            UserEntity user = userService.findByUsername(getUsername.getUsername());
+            mealService.generateSchedule(diet, user);
+            return "redirect:/user";
+        }
     }
+
+
     @GetMapping("/shuffleMeal/{id}")
     public String shuffleMeal(@PathVariable String id) {
         mealService.editMeal(Long.parseLong(id));

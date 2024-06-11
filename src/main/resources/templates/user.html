@@ -99,7 +99,7 @@
                         <div class="row">
                             <div class="col-4">
                                 <output id="FishOut" for="Protein">50%</output>
-                                <i class="fa-solid fa-drumstick-bite text-warning"></i>
+                                <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)"></i>
 
 
                             </div>
@@ -107,7 +107,8 @@
                                 <h4 class="text-primary">Protein</h4>
                             </div>
                             <div class="col-4">
-                                <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)"></i>
+
+                                <i class="fa-solid fa-drumstick-bite text-warning"></i>
                                 <output id="MeatOut" for="Protein">50%</output>
 
 
@@ -142,9 +143,8 @@
                         <div class="row mt-2 justify-content-evenly">
                             <div class="col-6">
                                 <label for="date" class="form-label" hidden>Start Date</label>
-                                <input type="date" class="form-control" id="date" th:field="*{startDate}" required
-                                       placeholder="Start Date"
-                                       >
+                                <input class="form-control" id="date" onchange="validateDate()" placeholder="Start Date"
+                                       required th:field="*{startDate}" type="date">
                             </div>
                             <div class="col-5 ">
                                 <button type="submit" class="btn btn-primary w-100">Submit</button>
@@ -165,6 +165,18 @@
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" th:src="@{slick/slick.min.js}" ></script>
+    <script>
+        function validateDate() {
+            var inputDate = new Date(document.getElementById('date').value);
+            var currentDate = new Date();
+            currentDate.setHours(0,0,0,0); // set time to 00:00:00.000
+
+            if (inputDate < currentDate) {
+                alert("Date must be in the future or present");
+                document.getElementById('date').value = '';
+            }
+        }
+    </script>
     <script>
 
         $(document).ready(function(){
