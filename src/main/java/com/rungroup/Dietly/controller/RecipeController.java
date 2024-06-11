@@ -58,6 +58,24 @@ public class RecipeController {
         model.addAttribute("recipes", recipes);
         return "recipes";
     }
+    @GetMapping("/recipes/category/{category}")
+    public String listRecipesByCategory(@PathVariable String category, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = false;
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Collection<? extends GrantedAuthority> authorities =
+                    ((UserDetails) authentication.getPrincipal()).getAuthorities();
+            isAdmin = authorities.stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        }
+
+        model.addAttribute("isAdmin", isAdmin);
+
+        List<RecipeDTO> recipes = recipeService.getRecipesByCategory(category);
+        model.addAttribute("recipes", recipes);
+        return "recipes";
+    }
 
     @GetMapping("/recipes/new")
     public String newRecipe(Model model) {
@@ -106,6 +124,8 @@ public class RecipeController {
 
         return "redirect:/recipes";
     }
+
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/recipes/edit/{recipeID}")
     public String editRecipe(@PathVariable Long recipeID, Model model) {

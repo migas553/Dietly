@@ -10,136 +10,187 @@
     <!-- Page Content-->
     <section  class="py-5">
         <div class="container my-5
-                    bg-info-subtle border border-warning-subtle rounded-5">
-            <h1 class="text-primary courgette-regular text-center my-5">Hello <span class="text-success"
+                    ">
+            <h1 class="text-primary courgette-regular text-center mt-5">Hello <span class="text-success"
                                                                    th:text="${user.firstName}"></span></h1>
-            <hr>
+            <p class="text-center text-primary mb-5">Welcome to your personal area, here you can create and see your
+                meal
+            plan</p>
 
 
-            <H3 class="text-primary"> Make your <span class="courgette-regular text-success">weekly plan</span></H3>
 
-            <div class="slider-container">
-                <form role="form" method="post" th:action="@{/generateSchedule}" th:object="${diet}">
-                <div class="mx-auto">
-                        <input type="range" class="form-range protein-slider" min="0" max="100" step="25"
-                               id="Protein">
-                        <label for="Protein" id="fish-label" class="slider-label">Fish</label>
-                        <output id="FishOut" for="Protein">50%</output>
-                        <label id="meat-label" class="slider-label">Meat</label>
-                        <output id="MeatOut" for="Protein">50%</output>
-                        <input type="hidden" id="fishValue" th:field="*{fishPercentage}">
-                        <input type="hidden" id="meatValue" th:field="*{meatPercentage}">
-                </div>
-                    <div class="mx-auto">
-                        <input type="range" class="form-range protein-slider" min="0" max="100" step="25"
-                               id="Vegetarian" th:field="*{vegetablePercentage}">
-                        <label for="Vegetarian" id="VegetarianLabel" class="slider-label">Vegetarian</label>
-                        <output id="VegetarianOut" for="Protein">0%</output>
-                    </div>
-                    <div class="mx-auto">
-                        <label for="date" class="form-label">Start Date</label>
-                        <input type="date" class="form-control" id="date" th:field="*{startDate}" required>
-                        <p class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
-                    </div>
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-                </form>
-
-            </div>
-            <hr>
-            <div class="container">
-                <h1 class="text-primary text-center m-5">Your meal <span class="courgette-regular text-success"> Plan
+            <div class="container  border border-warning-subtle rounded-5 bg-info-subtle" th:if="${mealsByDate != null and !#maps.isEmpty(mealsByDate)}">
+                <h1 class="text-primary text-center m-3">Your<span class="courgette-regular text-success">  Meal Plan
                 </span></h1>
-                <div class="row">
+
+                <div class="row gx-3  justify-content-center px-5">
 <!--                    Refeição-->
-                    <div class="col-lg-3 col-md-5 col-10 m-2 p-3
-                            bg-success border border-warning-subtle rounded-2"
-                         th:each="entry : ${mealsByDate}">
+                    <div class="slider-container">
+                        <div th:each="entry : ${mealsByDate}" class="slick-slide col-12 col-md-6 col-lg-4 my-3 p-2">
 
-
-                        <div class="row text-center">
-                            <h2>
-                                <span class="text-primary courgette-regular" th:text="${entry.value[0].name}"></span>
-                            </h2>
-                            <p>
-                                <span class="text-white courgette-regular" th:text="${#temporals.format(entry.key,'dd-MM-yyyy')}"></span>
-                            </p>
-
-
-                        </div>
-
-
-                        <div th:each="meal : ${entry.value}" >
-                            <div class="row rounded-3 shadow-sm bg-white m-2 p-2">
-                                <div class="col-4 ">
-                                    <img class="w-100 rounded border border-info-subtle"
-                                         th:src="@{${meal.recipe.imageUrl}}" alt=""/>
-                                </div>
-
-                                <div class="col-7 align-content-around">
-                                    <div class="row my-auto">
-                                        <div class="col-12">
-                                            <a th:href="@{/recipes/{recipeId}(recipeId=${meal.recipe.id})}"
-                                               class="text-primary mt-5 text-decoration-none"
-                                            ><h6 th:text="${meal.recipe.name}"></h6></a>
-                                        </div>
+                                <div class="border border-warning-subtle rounded-5 p-2" style="background-color: #76b666;">
+                                    <!-- Meal Name -->
+                                    <div class="row text-center">
+                                        <h2>
+                                            <span class="text-primary courgette-regular" th:text="${entry.value[0].name}"></span>
+                                        </h2>
+                                        <p>
+                                            <span class="text-white courgette-regular" th:text="${#temporals.format(entry.key,'dd-MM-yyyy')}"></span>
+                                        </p>
                                     </div>
 
-                                    <div class="row ">
-                                        <div class="col pb-0 ">
-                                            <p
-                                                    th:text="${meal.mealType.name}" class="text-primary"></p>
+                                <div th:each="meal : ${entry.value}">
+                                    <div class="row rounded-3 shadow-sm bg-white my-1 mx-1">
+                                        <div class="col-4 align-content-center">
+                                            <img class="w-100 rounded border border-info-subtle" th:src="@{${meal.recipe.imageUrl}}" alt=""/>
                                         </div>
 
-                                        <div class="col text-end">
+                                        <div class="col-7 align-content-around my-3">
+                                            <div class="row my-auto">
+                                                <div class="col-12">
+                                                    <a th:href="@{/recipes/{recipeId}(recipeId=${meal.recipe.id})}" class="text-primary mt-5 text-decoration-none">
+                                                        <h6 th:text="${meal.recipe.name}"></h6>
+                                                    </a>
+                                                </div>
+                                            </div>
 
-                                            <p class="text-primary">
-                                                <i class="fa-solid fa-drumstick-bite text-warning"
-                                                   th:if="${meal.recipe.category} == 'Meat'"></i>
-                                                <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)"
-                                                   th:if="${meal.recipe.category} == 'Fish'"></i>
-                                                <i class="fa-solid fa-leaf text-success"
-                                                   th:if="${meal.recipe.category} == 'Vegetarian'"></i>
-                                                <a class="text-dark" th:href="@{/shuffleMeal/{mealId}(mealId=${meal.id})}" ><i class="fa-solid fa-arrows-rotate text-secondary"></i></a>
+                                            <div class="row">
+                                                <div class="col pb-0">
+                                                    <p th:text="${meal.mealType.name}" class="text-primary"></p>
+                                                </div>
+
+                                                <div class="col text-end">
+                                                    <p class="text-primary">
+                                                        <i class="fa-solid fa-drumstick-bite text-warning" th:if="${meal.recipe.category} == 'Meat'"></i>
+                                                        <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)" th:if="${meal.recipe.category} == 'Fish'"></i>
+                                                        <i class="fa-solid fa-leaf text-success" th:if="${meal.recipe.category} == 'Vegetarian'"></i>
+                                                        <a class="text-dark" th:href="@{/shuffleMeal/{mealId}(mealId=${meal.id})}"><i class="fa-solid fa-arrows-rotate text-secondary"></i></a>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-<!--                        <div class="bg-white my-2" th:each="meal : ${entry.value}">-->
-
-<!--                            <h4 th:text="${meal.mealType.name}"></h4>-->
-<!--                            <img class="w-100 rounded-5 border border-warning-subtle shadow-lg"-->
-<!--                                 th:src="@{${meal.recipe.imageUrl}}" alt="Current Image">-->
-<!--                            <p th:text="${meal.recipe.name}"></p>-->
-
-<!--                            <div class="row">-->
-<!--                                <div class="col">-->
-<!--                                    <p class="text-primary">-->
-<!--                                        <i class="fa-solid fa-drumstick-bite text-warning"-->
-<!--                                           th:if="${meal.recipe.category} == 'Meat'"></i>-->
-<!--                                        <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)"-->
-<!--                                           th:if="${meal.recipe.category} == 'Fish'"></i>-->
-<!--                                        <i class="fa-solid fa-leaf text-success"-->
-<!--                                           th:if="${meal.recipe.category} == 'Vegetarian'"></i>-->
-<!--                                        <span th:text="${meal.recipe.category}"></span>-->
-<!--                                    </p>-->
-<!--                                </div>-->
-<!--                                <div class="col" >-->
-<!--                                    <a class="text-dark" th:href="@{/shuffleMeal/{mealId}(mealId=${meal.id})}" ><i-->
-<!--                                    class="fa-solid fa-arrows-rotate text-secondary"></i></a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-
-            </div>
+                    </div>
+                    </div>
+                    </div>
                 </div>
             </div>
+        <div class="row">
+            <div class="row text-center mt-5">
+                <H3 class="text-primary"> Make your <span class="courgette-regular text-success">weekly plan</span></H3>
+                <p class="text-primary">Choose the percentage of each type of meal you want to have in your weekly plan</p>
+            </div>
+            <div class="row text-center justify-content-center">
+                <div class="col-11 col-md-5 mb-5">
+                    <form role="form" method="post" th:action="@{/generateSchedule}" th:object="${diet}">
+<!--                        Barra proteina-->
+                        <div class="row">
+                            <input type="range" class="form-range protein-slider" min="0" max="100" step="25"
+                                   id="Protein">
+                            <label for="Protein" id="fish-label" class="slider-label" hidden="">Fish</label>
+                            <label id="meat-label" class="slider-label" hidden="">Meat</label>
+                            <input type="hidden" id="fishValue" th:field="*{fishPercentage}">
+                            <input type="hidden" id="meatValue" th:field="*{meatPercentage}">
+
+                        </div>
+
+                        <!--Proteina-->
+                        <div class="row">
+                            <div class="col-4">
+                                <output id="FishOut" for="Protein">50%</output>
+                                <i class="fa-solid fa-drumstick-bite text-warning"></i>
+
+
+                            </div>
+                            <div class="col-4">
+                                <h4 class="text-primary">Protein</h4>
+                            </div>
+                            <div class="col-4">
+                                <i class="fa-solid fa-fish" style="color: hsl(188, 70%, 32%)"></i>
+                                <output id="MeatOut" for="Protein">50%</output>
+
+
+                            </div>
+                        </div>
+                        <hr class="text-danger">
+<!--                        Barra vegetariano-->
+                        <div class="row mt-1">
+                            <input type="range" class="form-range protein-slider" min="0" max="100" step="25"
+                                   id="Vegetarian" th:field="*{vegetablePercentage}">
+                            <label for="Vegetarian" id="VegetarianLabel" class="slider-label" hidden="">Vegetarian</label>
+                        </div>
+
+                        <!--VEgetariano-->
+                        <div class="row">
+                            <div class="col-4">
+
+                            </div>
+                            <div class="col-4">
+                                <h4 class="text-primary">Vegetarian</h4>
+                            </div>
+                            <div class="col-4">
+                                <output id="VegetarianOut" for="Protein">0%</output>
+                                <i class="fa-solid fa-leaf text-success" ></i>
+                            </div>
+                        </div>
+
+                        <hr class="text-danger">
+                        <p class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+
+
+                        <div class="row mt-2 justify-content-evenly">
+                            <div class="col-6">
+                                <label for="date" class="form-label" hidden>Start Date</label>
+                                <input type="date" class="form-control" id="date" th:field="*{startDate}" required
+                                       placeholder="Start Date"
+                                       >
+                            </div>
+                            <div class="col-5 ">
+                                <button type="submit" class="btn btn-primary w-100">Submit</button>
+                            </div>
+                    </div>
+
+                </form>
+
+            </div>
         </div>
+        </div>
+        </div>
+        </div>
+
     </section>
+
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" th:src="@{slick/slick.min.js}" ></script>
+    <script>
+
+        $(document).ready(function(){
+            $('.slider-container').slick({
+                arrows: true,
+                prevArrow: '<button type="button" class="slick-prev text-primary"><i class="fas fa-chevron-left"></i></button>',
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                responsive: [
+                    {
+                        breakpoint: 960,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2,
+
+                        }
+                    },
+                    {
+                        breakpoint: 720,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
 </main>

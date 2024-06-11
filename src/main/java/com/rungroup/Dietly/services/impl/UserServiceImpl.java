@@ -29,16 +29,18 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveUser(RegistrationDTO registrationDTO) {
+    public boolean saveUser(RegistrationDTO registrationDTO) {
         UserEntity user = new UserEntity();
         user.setEmail(registrationDTO.getEmail());
         user.setUsername(registrationDTO.getUsername());
         user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
         user.setFirstName(registrationDTO.getFirstName());
         user.setLastName(registrationDTO.getLastName());
-        Role role = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Role not found"));
+        Role role = roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRoles(Collections.singletonList(role));
-        userRepository.save(user);
+        UserEntity savedUser = userRepository.save(user);
+        return savedUser != null;
+
     }
 
     @Override

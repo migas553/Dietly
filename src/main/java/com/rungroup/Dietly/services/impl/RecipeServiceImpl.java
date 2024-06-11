@@ -1,5 +1,6 @@
 package com.rungroup.Dietly.services.impl;
 import com.rungroup.Dietly.DTO.RecipeDTO;
+import com.rungroup.Dietly.models.Category;
 import com.rungroup.Dietly.models.Recipe;
 import com.rungroup.Dietly.repository.CategoryRepository;
 import com.rungroup.Dietly.repository.RecipeRepository;
@@ -39,6 +40,13 @@ public class RecipeServiceImpl implements RecipeService {
                 .category(recipe.getCategory().getName())
                 .createdOn(recipe.getCreatedOn())
                 .build();
+    }
+
+    @Override
+    public List<RecipeDTO> getRecipesByCategory(String category) {
+        System.out.println(category);
+        List<Recipe> recipes = recipeRepository.findByCategoryNameEquals(category);
+        return recipes.stream().map(this::mapToRecipeDTO).collect(Collectors.toList());
     }
 
     //  CREATE RECIPE - CREATE

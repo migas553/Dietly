@@ -54,7 +54,7 @@ public class SecurityConfig {
         http.formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/recipes", true)
+                        .defaultSuccessUrl("/user", true)
                         .failureUrl("/login?error=true")
 
 

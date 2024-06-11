@@ -18,4 +18,5 @@ public interface RecipeService {
     void deleteRecipe(Long recipeID);
     RecipeDTO mapToRecipeDTO(Recipe recipe);
 
+    List<RecipeDTO> getRecipesByCategory(String category);
 }

@@ -45,10 +45,13 @@ public class AuthController{
             System.out.printf("Error: %s%n", result.toString());
             return "register";
         }
+        System.out.println("Saving user: " + user.toString());
 
         userService.saveUser(user);
+        boolean registrationSuccess = userService.saveUser(user);
+        model.addAttribute("success", registrationSuccess);
 
-        return "redirect:/recipes";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
@@ -57,7 +60,7 @@ public class AuthController{
     }
     @GetMapping("/logout")
     public String logout() {
-        return "redirect:/recipes";
+        return "redirect:/";
     }
 
 

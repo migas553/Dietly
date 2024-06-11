@@ -5,7 +5,7 @@ import com.rungroup.Dietly.models.UserEntity;
 import org.springframework.security.core.userdetails.User;
 
 public interface UserService {
-    void saveUser(RegistrationDTO registrationDTO);
+    boolean saveUser(RegistrationDTO registrationDTO);
     UserEntity findByEmail(String email);
     UserEntity findByUsername(String username);
 
